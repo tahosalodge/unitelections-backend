@@ -9,7 +9,7 @@ export const create = async (req, res) => {
   const lodge = new Lodge(inputs);
   await lodge.save();
   await User.findOneAndUpdate(userId, {
-    belongsTo: [{ organization: lodge._id, canManage: true }],
+    belongsTo: [{ organization: lodge._id, canManage: true, type: 'Lodge' }],
   });
   res.json({ lodge });
 };

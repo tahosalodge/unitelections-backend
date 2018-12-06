@@ -5,7 +5,7 @@ export interface Membership extends Document {
   canManage: boolean;
 }
 
-export interface UserI extends Document {
+export interface IUser extends Document {
   _id: string;
   fname: string;
   lname: string;
@@ -38,10 +38,8 @@ const user = new Schema(
     },
     belongsTo: [
       {
-        organization: {
-          type: Schema.Types.ObjectId,
-          ref: 'Organization',
-        },
+        organization: Schema.Types.ObjectId,
+        model: String,
         canManage: Boolean,
       },
     ],
@@ -64,4 +62,4 @@ user.virtual('name').get(function() {
   return `${this.fname} ${this.lname}`;
 });
 
-export default model<UserI>('User', user);
+export default model<IUser>('User', user);

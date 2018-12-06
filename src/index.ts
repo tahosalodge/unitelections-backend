@@ -9,6 +9,7 @@ import * as errors from './utils/errors';
 import config from './utils/config';
 import lodgeRoutes from './modules/lodge/routes';
 import userRoutes from './modules/user/routes';
+import unitRoutes from './modules/unit/routes';
 
 Sentry.init({ dsn: config.dsn });
 const app = express();
@@ -26,6 +27,7 @@ app.set('port', config.port);
 app.get('/', (req, res) => res.send('OK'));
 app.use('/api/v1/lodge', lodgeRoutes);
 app.use('/api/v1/user', userRoutes);
+app.use('/api/v1/unit', unitRoutes);
 
 app.use(Sentry.Handlers.errorHandler() as express.ErrorRequestHandler);
 app.use(errors.notFound);

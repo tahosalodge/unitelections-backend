@@ -5,6 +5,7 @@ test('Anonymous users can register or view a lodge', () => {
   expect(ANONYMOUS.can('create', 'User')).toBeTruthy();
   expect(ANONYMOUS.can('read', 'Lodge')).toBeTruthy();
   expect(ANONYMOUS.can('create', 'Lodge')).toBeFalsy();
+  expect(ANONYMOUS.can('create', 'Unit')).toBeFalsy();
 });
 
 test('Users can manage their lodge', () => {
@@ -13,6 +14,11 @@ test('Users can manage their lodge', () => {
   expect(ability.can('update', adminUser)).toBeFalsy();
   expect(ability.can('update', lodge1)).toBeTruthy();
   expect(ability.can('update', lodge2)).toBeFalsy();
+});
+
+test('Users can create a unit', () => {
+  const ability = defineAbilitiesFor(regularUser);
+  expect(ability.can('create', 'Unit')).toBeTruthy();
 });
 
 test('Admins can manage all lodges and update other users', () => {

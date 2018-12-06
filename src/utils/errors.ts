@@ -58,7 +58,7 @@ export const developmentErrors = (
     status: err.status,
     stackHighlighted: err.stack || '',
   };
-  return res.status(err.status || 500).json({ errorDetails });
+  return res.status(err.status || 500).json(errorDetails);
 };
 
 /**

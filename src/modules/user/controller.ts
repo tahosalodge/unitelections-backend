@@ -2,9 +2,10 @@ import * as bcrypt from 'bcryptjs';
 import * as jwt from 'jsonwebtoken';
 import * as generatePassword from 'xkpasswd/generate';
 import { pick } from 'lodash';
+import Lodge from '../lodge/model';
 import { defineAbilitiesFor, ANONYMOUS } from '../user/roles';
 import { HttpError } from '../../utils/errors';
-import User, { UserI } from './model';
+import User, { IUser } from './model';
 import config from '../../utils/config';
 
 export interface Token {
@@ -17,13 +18,13 @@ export interface Token {
  * Authentication Methods
  */
 
-export const createToken = (user: UserI) => {
+export const createToken = (user: IUser) => {
   const { _id: userId, belongsTo, isAdmin } = user;
   const tokenVars: Token = { userId, belongsTo, isAdmin };
   return jwt.sign(tokenVars, config.jwtSecret, { expiresIn: 86400 });
 };
 
-export const sendUserInfo = (user: UserI) => {
+export const sendUserInfo = (user: IUser) => {
   const { fname, lname, belongsTo, email, isAdmin, _id } = user;
   const token = createToken(user);
   const userInfo = {
@@ -51,7 +52,8 @@ export const login = async (req, res) => {
   if (!passwordIsValid) {
     throw new HttpError('Password Incorrect', 401);
   }
-  res.json(sendUserInfo(user));
+  const lodge = await Lodge.findOne();
+  res.json({ user: sendUserInfo(user), lodge });
 };
 
 export const register = async (req, res) => {
@@ -82,7 +84,8 @@ export const verify = async (req, res) => {
   if (!user) {
     throw new HttpError('No user found.', 404);
   }
-  res.json(sendUserInfo(user));
+  const lodge = await Lodge.findOne();
+  res.json({ user: sendUserInfo(user), lodge });
 };
 
 export const tokenMiddleware = (req, res, next) => {
