@@ -22,6 +22,7 @@
     "mongoose-delete": "^0.4.0",
     "morgan": "^1.9.1",
     "nodemailer": "^4.6.8",
+    "ts-jest": "^23.10.5",
     "xkpasswd": "^1.0.5"
   },
   "devDependencies": {
@@ -53,8 +54,8 @@
     "now": "^11.4.6",
     "prettier": "^1.14.3",
     "prettier-eslint": "^8.8.2",
-    "ts-jest": "^23.10.3",
     "ts-node": "^7.0.1",
+    "tsconfig-paths": "^3.7.0",
     "tslint": "^5.11.0",
     "types-installer": "^1.4.0",
     "typescript": "^3.1.1"
@@ -89,6 +90,13 @@
     "moduleDirectories": [
       "node_modules",
       "src"
-    ]
+    ],
+    "moduleNameMapper": {
+      "^election/(.*)$": "<rootDir>/src/modules/election/$1",
+      "^lodge/(.*)$": "<rootDir>/src/modules/lodge/$1",
+      "^unit/(.*)$": "<rootDir>/src/modules/unit/$1",
+      "^user/(.*)$": "<rootDir>/src/modules/user/$1",
+      "^utils/(.*)$": "<rootDir>/src/utils/$1"
+    }
   }
 }

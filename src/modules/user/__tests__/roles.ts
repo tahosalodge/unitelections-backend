@@ -1,5 +1,5 @@
 import { regularUser, adminUser, lodge1, lodge2 } from 'utils/mocks';
-import { ANONYMOUS, defineAbilitiesFor } from '../roles';
+import { ANONYMOUS, defineAbilitiesFor } from 'user/roles';
 
 test('Anonymous users can register or view a lodge', () => {
   expect(ANONYMOUS.can('create', 'User')).toBeTruthy();

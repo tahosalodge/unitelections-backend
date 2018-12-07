@@ -2,11 +2,11 @@ import * as bcrypt from 'bcryptjs';
 import * as jwt from 'jsonwebtoken';
 import * as generatePassword from 'xkpasswd/generate';
 import { pick } from 'lodash';
-import Lodge from '../lodge/model';
-import { defineAbilitiesFor, ANONYMOUS } from '../user/roles';
-import { HttpError } from '../../utils/errors';
+import Lodge from 'lodge/model';
+import { defineAbilitiesFor, ANONYMOUS } from 'user/roles';
+import { HttpError } from 'utils/errors';
+import config from 'utils/config';
 import User, { IUser } from './model';
-import config from '../../utils/config';
 
 export interface Token {
   userId: string;

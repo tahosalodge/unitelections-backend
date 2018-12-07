@@ -5,11 +5,11 @@ import * as morgan from 'morgan';
 import * as cors from 'cors';
 import * as Sentry from '@sentry/node';
 
-import * as errors from './utils/errors';
-import config from './utils/config';
-import lodgeRoutes from './modules/lodge/routes';
-import userRoutes from './modules/user/routes';
-import unitRoutes from './modules/unit/routes';
+import * as errors from 'utils/errors';
+import config from 'utils/config';
+import lodgeRoutes from 'lodge/routes';
+import userRoutes from 'user/routes';
+import unitRoutes from 'unit/routes';
 
 Sentry.init({ dsn: config.dsn });
 const app = express();

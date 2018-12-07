@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { catchErrors } from 'utils/errors';
-import { tokenMiddleware } from 'user/controller';
+import { tokenMiddleware } from 'modules/user/controller';
 import * as controller from './controller';
 
 const router = Router();

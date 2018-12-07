@@ -1,6 +1,6 @@
 import { pick } from 'lodash';
-import User from '../user/model';
-import { HttpError } from '../../utils/errors';
+import User from 'modules/user/model';
+import { HttpError } from 'utils/errors';
 import Unit from './model';
 
 export const create = async (req, res) => {
@@ -17,7 +17,7 @@ export const create = async (req, res) => {
   const unit = new Unit(inputs);
   await unit.save();
   await User.findOneAndUpdate(userId, {
-    belongsTo: [{ organization: unit._id, canManage: true, type: 'Unit' }],
+    belongsTo: [{ organization: unit._id, canManage: true, model: 'Unit' }],
   });
   res.json({ unit });
 };
