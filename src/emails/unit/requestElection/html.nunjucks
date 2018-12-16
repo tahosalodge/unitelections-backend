@@ -1,0 +1,20 @@
+{% extends basePath %}
+
+{% block content %}
+Hi {{user.fname}},<br />
+Thanks for requesting an OA election for {{unit.unitType}} {{unit.number}}! Here are the dates you requested:<br />
+
+<ul>
+  {% for requestedDate in dates %}
+    <li>Date {{ loop.index }}: {{ requestedDate }}</li>
+  {% endfor %}
+</ul>
+We’ll notify you automatically when your chapter confirms a date. You can log into your election request <a href="https://elections.tahosa.co/elections/{{electionId}}">here</a><br /><br />
+
+You have what you need for now. In case you have questions you can contact elections@tahosalodge.org and we’ll respond as quickly as we can.<br /><br />
+
+In Scouting,<br /><br />
+
+Unit Elections Committee<br />
+Tahosa Lodge 383
+{% endblock %}

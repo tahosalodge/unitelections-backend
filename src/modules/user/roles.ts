@@ -1,6 +1,7 @@
 import { AbilityBuilder } from '@casl/ability';
+import { TokenUser } from 'modules/user/model';
 
-export const defineAbilitiesFor = user =>
+export const defineAbilitiesFor = (user?: TokenUser) =>
   AbilityBuilder.define((can, cannot) => {
     can('create', 'User');
     can('read', 'Lodge');
@@ -11,7 +12,7 @@ export const defineAbilitiesFor = user =>
         can('manage', 'User');
         can('manage', 'Unit');
       } else {
-        const ids = user.belongsTo.map(related => related._id);
+        const ids = user.belongsTo.map(related => related.organization);
         can('read', 'Lodge', { _id: { $in: ids } });
         can('read', 'Unit', { _id: { $in: ids } });
         can('manage', 'User', { _id: user.userId });
@@ -19,4 +20,4 @@ export const defineAbilitiesFor = user =>
     }
   });
 
-export const ANONYMOUS = defineAbilitiesFor(null);
+export const ANONYMOUS = defineAbilitiesFor();

@@ -1,0 +1,5 @@
+{% extends basePath %}
+
+{% block content %}
+The adult nomination for {{fname}} {{lname}} has been approved, and they have been notified of their nomination.
+{% endblock %}

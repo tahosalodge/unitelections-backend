@@ -1,0 +1,13 @@
+{% extends basePath %}
+
+{% block content %}
+Hey {{fname}},<br />
+An account has been created for you, login at https://elections.tahosa.co/login with the following credentials:<br /><br />
+
+User: {{email}}<br />
+Password: {{plainPass}}<br />
+Access Level: {{capability}}<br />
+Chapter: {{chapter}}<br /><br />
+
+If you have any questions or issues, please contact us at elections@tahosalodge.org.
+{% endblock %}

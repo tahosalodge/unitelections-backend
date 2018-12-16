@@ -1,8 +1,8 @@
 import { createTransport, Transporter } from 'nodemailer';
 import mg from 'nodemailer-mailgun-transport';
 import * as path from 'path';
-import Email from 'email-templates';
 import * as Sentry from '@sentry/node';
+import * as Email from 'email-templates';
 import config from 'utils/config';
 import { IUser } from 'modules/user/model';
 
@@ -10,11 +10,13 @@ const mgAuth = {
   auth: config.mailgun,
 };
 
+const basePath = path.resolve(__dirname, './base.njk');
+
 const transport = config.isDevelopment
   ? (createTransport(config.smtp) as Transporter)
   : (createTransport(mg(mgAuth)) as Transporter);
 
-export const sendEmail = async (subject, to, html) => {
+export const sendEmail = async (subject: string, to: string, html: string) => {
   const options = {
     to,
     subject,
@@ -59,7 +61,10 @@ export const templateSender = async (
     const email = createEmail(emailConfig);
     await email.send({
       template,
-      locals,
+      locals: {
+        basePath,
+        ...locals,
+      },
       message: {
         to,
       },
@@ -89,24 +94,4 @@ export const emailToUsers = (
   });
 };
 
-// const base = `// html
-// <div className="email" style="
-//     font-family: sans-serif;
-//     line-height: 2;
-//     font-size: 20px;
-//     background: #e5e5e5;
-//   ">
-//   <div style="
-//     background: #E31837;
-//     color: white;
-//     padding: 10px 20px;
-//     max-width: 500px;
-//     margin: 0 auto;
-//     ">
-//     <h2 style="margin: 0;">${title}</h2>
-//   </div>
-//   <div style="
-//   padding: 0.25em 0.5em; max-width: 500px; margin: 0 auto; background: white; width: 100%;">
-//     ${body}
-//   </div>
-// </div>`;
+export default templateSender;

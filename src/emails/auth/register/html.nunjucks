@@ -1,0 +1,5 @@
+{% extends basePath %}
+
+{% block content %}
+Hey {{fname}}, thanks for registering with Tahosa Lodge Elections. If you have any questions or issues, please contact us at elections@tahosalodge.org.
+{% endblock %}

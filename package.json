@@ -37,6 +37,7 @@
     "@types/jest": "^23.3.10",
     "@types/jsonwebtoken": "^8.3.0",
     "babel-eslint": "^10.0.1",
+    "date-fns": "^2.0.0-alpha.26",
     "eslint": "^5.6.1",
     "eslint-config-airbnb-base": "^13.1.0",
     "eslint-config-prettier": "^3.1.0",
@@ -44,6 +45,7 @@
     "eslint-import-resolver-node": "^0.3.2",
     "eslint-plugin-import": "^2.14.0",
     "eslint-plugin-prettier": "^3.0.0",
+    "ndb": "^1.0.42",
     "nodemon": "^1.18.4",
     "now": "^11.4.6",
     "prettier": "^1.14.3",
@@ -63,7 +65,8 @@
     "now-start": "node ./dist/index.js",
     "build": "tsc",
     "now-build": "echo 'Built on now'",
-    "test": "jest"
+    "test": "jest",
+    "debug": "ndb yarn start"
   },
   "jest": {
     "roots": [

@@ -1,0 +1,19 @@
+{% extends basePath %}
+
+{% block content %}
+Hi {{fname}},<br />
+Thanks for requesting an OA election for Troop {{number}}!<br />
+Your unit election is confirmed for {{scheduledDate}}.<br />
+The OA chapter election team will arrive 15 minutes before your meeting begins at {{meetingTime}}.<br />
+A Scoutmaster or other unit leader will need to confirm the unit’s active attendance (50% required for the election) and eligible candidates on the ballot at that time.
+<br /><br />
+Be sure to log in and add eligible Scouts to your election here: <a href="https://elections.tahosa.co/elections/{{electionId}}">My Election</a>.<br />
+We’ll remind you about this 14 days, 7 days and 2 days prior to your election.<br />
+Really important -- your unit ballot is LOCKED 24 hours prior to your scheduled election and cannot change.<br />
+For questions about elections procedure or website functions contact elections@tahosalodge.org.<br />
+
+In Scouting,<br /><br />
+
+Unit Elections Committee<br />
+Tahosa Lodge 383
+{% endblock %}

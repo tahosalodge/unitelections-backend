@@ -2,6 +2,7 @@ import { pick } from 'lodash';
 import User from 'modules/user/model';
 import { HttpError } from 'utils/errors';
 import Unit from './model';
+import sendEmail from 'emails/sendMail';
 
 export const create = async (req, res) => {
   const { body, userId } = req;
@@ -23,8 +24,13 @@ export const create = async (req, res) => {
   }
   const unit = new Unit(inputs);
   await unit.save();
-  await User.findOneAndUpdate(userId, {
+  const user = await User.findOneAndUpdate(userId, {
     belongsTo: [{ organization: unit._id, canManage: true, model: 'Unit' }],
+  });
+  sendEmail(user.email, 'unit/electionImport', {
+    fname: user.fname,
+    number: unit.number,
+    unitId: unit._id,
   });
   res.json({ unit });
 };

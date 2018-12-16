@@ -1,0 +1,9 @@
+{% extends basePath %}
+
+{% block content %}
+The election results have been entered for Troop {{number}}.<br /><br />
+
+{{electedCount}} candidates were elected.<br />
+
+<a href="https://elections.tahosa.co/elections/{{electionId}}">Click here</a> to see the details of this election.<br />
+{% endblock %}

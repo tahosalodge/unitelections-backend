@@ -1,24 +1,35 @@
 import { pick } from 'lodash';
+import { format } from 'date-fns';
 import User from 'modules/user/model';
 import Unit from 'modules/unit/model';
 import { HttpError } from 'utils/errors';
 import Election from './model';
+import sendEmail from 'emails/sendMail';
 
 export const create = async (req, res) => {
   const { body, userId } = req;
   const inputs = pick(body, ['unitId', 'requestedDates', 'status']);
-  const { chapter } = await Unit.findById(inputs.unitId);
+  const unit = await Unit.findById(inputs.unitId);
   const election = new Election({
     ...inputs,
     season: '2019',
-    chapter,
+    chapter: unit.chapter,
     status: 'Requested',
   });
   await election.save();
-  await User.findOneAndUpdate(userId, {
+  const user = await User.findOneAndUpdate(userId, {
     belongsTo: [
       { organization: election._id, canManage: true, model: 'Election' },
     ],
+  });
+  const dates = election.requestedDates.map((date: string) =>
+    format(date, 'MM/dd/yyyy')
+  );
+  sendEmail(user.email, 'unit/requestElection', {
+    election,
+    user,
+    dates,
+    unit,
   });
   res.json({ election });
 };
