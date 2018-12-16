@@ -1,18 +1,19 @@
 import { pick } from 'lodash';
 import User from 'modules/user/model';
+import Unit from 'modules/unit/model';
 import { HttpError } from 'utils/errors';
 import Election from './model';
 
 export const create = async (req, res) => {
   const { body, userId } = req;
-  const inputs = pick(body, [
-    'unitId',
-    'requestedDates',
-    'status',
-    'season',
-    'chapter',
-  ]);
-  const election = new Election(inputs);
+  const inputs = pick(body, ['unitId', 'requestedDates', 'status']);
+  const { chapter } = await Unit.findById(inputs.unitId);
+  const election = new Election({
+    ...inputs,
+    season: '2019',
+    chapter,
+    status: 'Requested',
+  });
   await election.save();
   await User.findOneAndUpdate(userId, {
     belongsTo: [

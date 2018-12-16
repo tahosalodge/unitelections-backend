@@ -37,7 +37,6 @@ const unit = new Schema({
   number: {
     type: String,
     required: true,
-    unique: true,
   },
   unitType: {
     type: String,

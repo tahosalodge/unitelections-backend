@@ -6,7 +6,7 @@ import { Request, Response, NextFunction } from 'express';
 export class HttpError extends Error {
   status: number;
 
-  constructor(message, code) {
+  constructor(message: string, code: number) {
     super(message);
     this.status = code;
   }

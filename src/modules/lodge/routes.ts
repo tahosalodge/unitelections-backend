@@ -5,7 +5,7 @@ import * as controller from './controller';
 
 const router = Router();
 
-router.post('/', catchErrors(controller.create));
+router.post('/', tokenMiddleware, catchErrors(controller.create));
 router.get('/', tokenMiddleware, catchErrors(controller.list));
 router.get('/:lodgeId', tokenMiddleware, catchErrors(controller.get));
 router.patch('/:lodgeId', tokenMiddleware, catchErrors(controller.update));

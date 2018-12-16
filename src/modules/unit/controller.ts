@@ -14,6 +14,13 @@ export const create = async (req, res) => {
     'unitType',
     'chapter',
   ]);
+  const existingUnit = await Unit.findOne({
+    number: inputs.number,
+    unitType: inputs.unitType,
+  });
+  if (existingUnit) {
+    throw new HttpError('Unit already exists', 400);
+  }
   const unit = new Unit(inputs);
   await unit.save();
   await User.findOneAndUpdate(userId, {
