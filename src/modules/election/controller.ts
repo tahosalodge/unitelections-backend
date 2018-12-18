@@ -3,8 +3,8 @@ import { format } from 'date-fns';
 import User from 'modules/user/model';
 import Unit from 'modules/unit/model';
 import { HttpError } from 'utils/errors';
-import Election from './model';
 import sendEmail from 'emails/sendMail';
+import Election from './model';
 
 export const create = async (req, res) => {
   const { body, userId } = req;
@@ -38,6 +38,9 @@ export const get = async (req, res) => {
   const { electionId } = req.params;
   req.ability.throwUnlessCan('read', 'Election');
   const election = await Election.findById(electionId);
+  if (!election) {
+    throw new HttpError('Election not found', 404);
+  }
   res.json({ election });
 };
 
