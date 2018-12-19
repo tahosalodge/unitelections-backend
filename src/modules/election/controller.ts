@@ -1,8 +1,8 @@
 import { pick } from 'lodash';
 import { format } from 'date-fns';
 import * as Sentry from '@sentry/node';
-import User from 'modules/user/model';
-import Unit from 'modules/unit/model';
+import User from 'user/model';
+import Unit from 'unit/model';
 import { HttpError } from 'utils/errors';
 import sendEmail from 'emails/sendMail';
 import { notifyElectionRequested } from 'emails/notifyChapter';

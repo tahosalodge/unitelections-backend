@@ -4,7 +4,7 @@ import * as path from 'path';
 import * as Sentry from '@sentry/node';
 import * as Email from 'email-templates';
 import config from 'utils/config';
-import { IUser } from 'modules/user/model';
+import { IUser } from 'user/model';
 
 const mgAuth = {
   auth: config.mailgun,

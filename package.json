@@ -19,6 +19,7 @@
     "joi": "^14.3.0",
     "jsonwebtoken": "^8.4.0",
     "lodash": "^4.17.11",
+    "module-alias": "^2.1.0",
     "mongoose": "^5.4.0",
     "mongoose-delete": "^0.5.0",
     "morgan": "^1.9.1",
@@ -26,7 +27,6 @@
     "nodemailer-mailgun-transport": "^1.4.0",
     "nunjucks": "^3.1.6",
     "ts-jest": "^23.10.5",
-    "ts-node": "^7.0.1",
     "xkpasswd": "^1.0.5"
   },
   "devDependencies": {
@@ -51,6 +51,7 @@
     "now": "^12.1.12",
     "prettier": "^1.15.3",
     "prettier-eslint": "^8.8.2",
+    "ts-node": "^7.0.1",
     "ts-typie": "^1.1.1",
     "tsconfig-paths": "^3.7.0",
     "tslint": "^5.12.0",
@@ -62,9 +63,9 @@
     "lint:report": "yarn lint -f node_modules/eslint-detailed-reporter/lib/detailed.js -o coverage/eslint.html",
     "format": "prettier --write 'src/**/*.{js,mjs}'",
     "start": "nodemon",
-    "now-start": "yarn ts-node --project ./tsconfig.json -r tsconfig-paths/register dist/index.js",
+    "now-start": "node dist/index.js",
     "build": "tsc",
-    "now-build": "echo 'Built on now'",
+    "now-build": "echo 'Built on CircleCI'",
     "test": "jest",
     "debug": "ndb yarn start"
   },
@@ -95,5 +96,13 @@
       "^user/(.*)$": "<rootDir>/src/modules/user/$1",
       "^utils/(.*)$": "<rootDir>/src/utils/$1"
     }
+  },
+  "_moduleAliases": {
+    "election": "dist/modules/election",
+    "lodge": "dist/modules/lodge",
+    "unit": "dist/modules/unit",
+    "user": "dist/modules/user",
+    "utils": "dist/utils",
+    "emails": "dist/emails"
   }
 }

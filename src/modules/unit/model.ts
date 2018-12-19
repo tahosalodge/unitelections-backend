@@ -1,6 +1,6 @@
 import { Schema, model, Document } from 'mongoose';
-import { IChapter } from 'modules/lodge/model';
-import { IUser } from 'modules/user/model';
+import { IChapter } from 'lodge/model';
+import { IUser } from 'user/model';
 
 interface IRepresentative {
   fname: String;

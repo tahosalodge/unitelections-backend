@@ -1,3 +1,4 @@
+require('module-alias/register');
 import * as express from 'express';
 import * as mongoose from 'mongoose';
 import * as bodyParser from 'body-parser';

@@ -1,5 +1,5 @@
 import { pick } from 'lodash';
-import User from 'modules/user/model';
+import User from 'user/model';
 import { HttpError } from 'utils/errors';
 import Unit from './model';
 // import sendEmail from 'emails/sendMail';

@@ -1,6 +1,6 @@
-import User, { IUser } from 'modules/user/model';
-import { IElection } from 'modules/election/model';
-import { IUnit } from 'modules/unit/model';
+import User, { IUser } from 'user/model';
+import { IElection } from 'election/model';
+import { IUnit } from 'unit/model';
 import { emailToUsers } from './sendMail';
 
 export const notifyElectionRequested = async (params: {

@@ -1,5 +1,5 @@
 import { AbilityBuilder } from '@casl/ability';
-import { TokenUser } from 'modules/user/model';
+import { TokenUser } from 'user/model';
 
 export const defineAbilitiesFor = (user?: TokenUser) =>
   AbilityBuilder.define((can, cannot) => {
