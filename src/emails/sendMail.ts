@@ -63,6 +63,7 @@ export const templateSender = async (
       template,
       locals: {
         basePath,
+        publicUrl: config.publicUrl,
         ...locals,
       },
       message: {

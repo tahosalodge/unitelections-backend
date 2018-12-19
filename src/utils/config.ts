@@ -13,6 +13,7 @@ interface Config {
   };
   fromEmail: string;
   smtp: string;
+  publicUrl: string;
 }
 
 const config: Config = {
@@ -28,6 +29,7 @@ const config: Config = {
   },
   fromEmail: process.env.FROM_EMAIL || '',
   smtp: process.env.SMTP_STRING || '',
+  publicUrl: process.env.PUBLIC_URL || '',
 };
 
 export default config;

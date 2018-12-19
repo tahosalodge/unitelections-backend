@@ -1,16 +1,18 @@
 import { pick } from 'lodash';
 import { format } from 'date-fns';
+import * as Sentry from '@sentry/node';
 import User from 'modules/user/model';
 import Unit from 'modules/unit/model';
 import { HttpError } from 'utils/errors';
 import sendEmail from 'emails/sendMail';
+import { notifyElectionRequested } from 'emails/notifyChapter';
 import Election from './model';
 
 export const create = async (req, res) => {
   const { body, userId } = req;
   const inputs = pick(body, ['unitId', 'requestedDates', 'status']);
   const unit = await Unit.findById(inputs.unitId);
-  const election = new Election({
+  let election = new Election({
     ...inputs,
     season: '2019',
     chapter: unit.chapter,
@@ -25,6 +27,7 @@ export const create = async (req, res) => {
   const dates = election.requestedDates.map((date: string) =>
     format(date, 'MM/dd/yyyy')
   );
+  election = election.toObject();
   sendEmail(user.email, 'unit/requestElection', {
     election,
     user,
@@ -32,6 +35,11 @@ export const create = async (req, res) => {
     unit,
   });
   res.json({ election });
+  try {
+    notifyElectionRequested({ election, unit, dates });
+  } catch (error) {
+    Sentry.captureException(error);
+  }
 };
 
 export const get = async (req, res) => {

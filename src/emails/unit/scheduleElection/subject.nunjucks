@@ -1,1 +1,1 @@
-Election Scheduled for Troop {{number}}
+Election Scheduled for {{unit.unitType}} {{unit.number}}

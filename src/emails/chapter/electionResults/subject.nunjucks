@@ -1,1 +1,1 @@
-Election Results for Troop {{number}}
+Election Results for {{unit.unitType}} {{unit.number}}
