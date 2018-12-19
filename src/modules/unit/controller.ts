@@ -1,7 +1,8 @@
 import { pick } from 'lodash';
-import User from '../user/model';
-import { HttpError } from '../../utils/errors';
+import User from 'modules/user/model';
+import { HttpError } from 'utils/errors';
 import Unit from './model';
+// import sendEmail from 'emails/sendMail';
 
 export const create = async (req, res) => {
   const { body, userId } = req;
@@ -14,10 +15,17 @@ export const create = async (req, res) => {
     'unitType',
     'chapter',
   ]);
+  const existingUnit = await Unit.findOne({
+    number: inputs.number,
+    unitType: inputs.unitType,
+  });
+  if (existingUnit) {
+    throw new HttpError('Unit already exists', 400);
+  }
   const unit = new Unit(inputs);
   await unit.save();
-  await User.findOneAndUpdate(userId, {
-    belongsTo: [{ organization: unit._id, canManage: true, type: 'Unit' }],
+  const user = await User.findOneAndUpdate(userId, {
+    belongsTo: [{ organization: unit._id, canManage: true, model: 'Unit' }],
   });
   res.json({ unit });
 };

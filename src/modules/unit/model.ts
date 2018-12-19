@@ -1,6 +1,6 @@
 import { Schema, model, Document } from 'mongoose';
-import { IChapter } from '../lodge/model';
-import { IUser } from '../user/model';
+import { IChapter } from 'modules/lodge/model';
+import { IUser } from 'modules/user/model';
 
 interface IRepresentative {
   fname: String;
@@ -37,7 +37,6 @@ const unit = new Schema({
   number: {
     type: String,
     required: true,
-    unique: true,
   },
   unitType: {
     type: String,

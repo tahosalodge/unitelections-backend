@@ -1,0 +1,28 @@
+<div className="email" style="
+    font-family: sans-serif;
+    line-height: 1.4;
+    font-size: 20px;
+    background: #e5e5e5;
+    min-height: 500px;
+  ">
+  <div style="
+    background: #E31837;
+    color: white;
+    padding: 10px 20px;
+    max-width: 700px;
+    margin: 0 auto;
+    ">
+    <h2 style="margin: 0;">{% block title %}{% endblock %}</h2>
+  </div>
+<table height="500">
+  <div style="
+    padding: 1em;
+    max-width: 700px;
+    margin: 0 auto;
+    background: white;
+    width: 100%;
+    ">
+    {% block content %}{% endblock %}
+  </div>
+</table>
+</div>

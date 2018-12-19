@@ -1,5 +1,5 @@
 import { Router } from 'express';
-import { catchErrors } from '../../utils/errors';
+import { catchErrors } from 'utils/errors';
 import * as controller from './controller';
 
 const { tokenMiddleware } = controller;

@@ -2,11 +2,12 @@ import * as bcrypt from 'bcryptjs';
 import * as jwt from 'jsonwebtoken';
 import * as generatePassword from 'xkpasswd/generate';
 import { pick } from 'lodash';
-import Lodge from '../lodge/model';
-import { defineAbilitiesFor, ANONYMOUS } from '../user/roles';
-import { HttpError } from '../../utils/errors';
+import Lodge from 'lodge/model';
+import { defineAbilitiesFor, ANONYMOUS } from 'user/roles';
+import { HttpError } from 'utils/errors';
+import config from 'utils/config';
+import sendMail from 'emails/sendMail';
 import User, { IUser } from './model';
-import config from '../../utils/config';
 
 export interface Token {
   userId: string;
@@ -72,10 +73,11 @@ export const register = async (req, res) => {
       password: bcrypt.hashSync(password, 8),
     };
     const user = await User.create(toCreate);
-    // templateSender(email, 'auth/register', { fname });
-    res.json(sendUserInfo(user));
+    const lodge = await Lodge.findOne();
+    sendMail(email, 'auth/register', { fname });
+    res.json({ user: sendUserInfo(user), lodge });
   } catch ({ message }) {
-    throw new HttpError(400, message);
+    throw new HttpError(message, 400);
   }
 };
 
@@ -118,7 +120,7 @@ export const resetPassword = async (req, res) => {
   const plainPassword = generatePassword({ separators: '-' });
   const password = bcrypt.hashSync(plainPassword, 8);
   await User.findOneAndUpdate({ email }, { password });
-  // templateSender(email, 'auth/resetPassword', { password: plainPassword });
+  sendMail(email, 'auth/resetPassword', { password: plainPassword });
   res.send(
     `Password reset successfully, a new password has been emailed to you at ${email}`
   );
@@ -138,9 +140,11 @@ export const create = async (req, res) => {
   ]);
   const password = generatePassword({ separators: '-' });
   const hashedPassword = bcrypt.hashSync(password, 8);
-  console.log({ data, password });
   const user = await User.create({ ...data, password: hashedPassword });
-  // TODO trigger invite email
+  sendMail(data.email, 'createdUser', {
+    ...data,
+    password,
+  });
   res.json(user);
 };
 

@@ -1,6 +1,6 @@
 import { pick } from 'lodash';
-import User from '../user/model';
-import { HttpError } from '../../utils/errors';
+import User from 'modules/user/model';
+import { HttpError } from 'utils/errors';
 import Lodge from './model';
 
 export const create = async (req, res) => {
@@ -9,7 +9,7 @@ export const create = async (req, res) => {
   const lodge = new Lodge(inputs);
   await lodge.save();
   await User.findOneAndUpdate(userId, {
-    belongsTo: [{ organization: lodge._id, canManage: true, type: 'Lodge' }],
+    belongsTo: [{ organization: lodge._id, canManage: true, model: 'Lodge' }],
   });
   res.json({ lodge });
 };

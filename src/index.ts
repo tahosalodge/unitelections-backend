@@ -5,13 +5,14 @@ import * as morgan from 'morgan';
 import * as cors from 'cors';
 import * as Sentry from '@sentry/node';
 
-import * as errors from './utils/errors';
-import config from './utils/config';
-import lodgeRoutes from './modules/lodge/routes';
-import userRoutes from './modules/user/routes';
-import unitRoutes from './modules/unit/routes';
+import * as errors from 'utils/errors';
+import config from 'utils/config';
+import lodgeRoutes from 'lodge/routes';
+import userRoutes from 'user/routes';
+import unitRoutes from 'unit/routes';
+import electionRoutes from 'election/routes';
 
-Sentry.init({ dsn: config.dsn });
+Sentry.init({ dsn: config.sentry });
 const app = express();
 mongoose.connect(
   config.mongoUrl,
@@ -28,6 +29,7 @@ app.get('/', (req, res) => res.send('OK'));
 app.use('/api/v1/lodge', lodgeRoutes);
 app.use('/api/v1/user', userRoutes);
 app.use('/api/v1/unit', unitRoutes);
+app.use('/api/v1/election', electionRoutes);
 
 app.use(Sentry.Handlers.errorHandler() as express.ErrorRequestHandler);
 app.use(errors.notFound);

@@ -1,0 +1,5 @@
+{% extends basePath %}
+
+{% block content %}
+Your new password is: {{password}}
+{% endblock %}

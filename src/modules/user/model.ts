@@ -3,6 +3,7 @@ import { Schema, model, Document } from 'mongoose';
 export interface Membership extends Document {
   organization: string;
   canManage: boolean;
+  model: string;
 }
 
 export interface IUser extends Document {
@@ -12,6 +13,12 @@ export interface IUser extends Document {
   phone?: string;
   email: string;
   password: string;
+  belongsTo: Array<Membership>;
+  isAdmin: boolean;
+}
+
+export interface TokenUser {
+  userId: string;
   belongsTo: Array<Membership>;
   isAdmin: boolean;
 }
