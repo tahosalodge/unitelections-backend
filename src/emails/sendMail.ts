@@ -1,5 +1,5 @@
 import { createTransport, Transporter } from 'nodemailer';
-import mg from 'nodemailer-mailgun-transport';
+import * as mg from 'nodemailer-mailgun-transport';
 import * as path from 'path';
 import * as Sentry from '@sentry/node';
 import * as Email from 'email-templates';

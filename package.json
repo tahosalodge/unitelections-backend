@@ -38,6 +38,7 @@
     "@types/jest": "^23.3.10",
     "@types/jsonwebtoken": "^8.3.0",
     "babel-eslint": "^10.0.1",
+    "copyfiles": "^2.1.0",
     "date-fns": "^2.0.0-alpha.26",
     "eslint": "^5.10.0",
     "eslint-config-airbnb-base": "^13.1.0",
@@ -67,7 +68,8 @@
     "build": "tsc",
     "now-build": "echo 'Built on CircleCI'",
     "test": "jest",
-    "debug": "ndb yarn start"
+    "debug": "ndb yarn start",
+    "copy-templates": "copyfiles src/**/*.njk src/**/*.nunjucks dist/ -u 1"
   },
   "jest": {
     "roots": [
