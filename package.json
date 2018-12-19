@@ -62,7 +62,7 @@
     "lint:report": "yarn lint -f node_modules/eslint-detailed-reporter/lib/detailed.js -o coverage/eslint.html",
     "format": "prettier --write 'src/**/*.{js,mjs}'",
     "start": "nodemon",
-    "now-start": "node ./dist/index.js",
+    "now-start": "yarn ts-node --project ./tsconfig.json -r tsconfig-paths/register dist/index.js",
     "build": "tsc",
     "now-build": "echo 'Built on now'",
     "test": "jest",
