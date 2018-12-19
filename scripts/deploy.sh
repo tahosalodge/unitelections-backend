@@ -13,7 +13,7 @@ fi
 if [ -e now.json ]
 then
     yarn build
-    yarn now --token $ZEIT_TOKEN
+    yarn now --force --token $ZEIT_TOKEN
     yarn now alias --token $ZEIT_TOKEN
 else
     echo "No environment to deploy, exiting."
