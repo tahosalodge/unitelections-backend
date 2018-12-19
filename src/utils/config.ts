@@ -8,7 +8,7 @@ interface Config {
   mongoUrl: string;
   sentry: string;
   mailgun: {
-    key: string;
+    api_key: string;
     domain: string;
   };
   fromEmail: string;
@@ -24,7 +24,7 @@ const config: Config = {
   mongoUrl: process.env.MONGO_URL || '',
   sentry: process.env.SENTRY_DSN || '',
   mailgun: {
-    key: process.env.MAILGUN_KEY || '',
+    api_key: process.env.MAILGUN_KEY || '',
     domain: process.env.MAILGUN_DOMAIN || '',
   },
   fromEmail: process.env.FROM_EMAIL || '',
