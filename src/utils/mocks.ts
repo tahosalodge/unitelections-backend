@@ -22,7 +22,7 @@ export class User {
     if (!admin) {
       this.belongsTo = [
         {
-          _id: 'abc',
+          organization: 'abc',
         },
       ];
     } else {
