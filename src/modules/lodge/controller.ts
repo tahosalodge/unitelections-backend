@@ -4,11 +4,15 @@ import { HttpError } from 'utils/errors';
 import Lodge from './model';
 
 export const create = async (req, res) => {
-  const { body, userId } = req;
+  const {
+    body,
+    user: { userId },
+  } = req;
+  req.ability.throwUnlessCan('create', 'Lodge');
   const inputs = pick(body, ['council', 'name', 'chapters']);
   const lodge = new Lodge(inputs);
   await lodge.save();
-  await User.findOneAndUpdate(userId, {
+  await User.findByIdAndUpdate(userId, {
     belongsTo: [{ organization: lodge._id, canManage: true, model: 'Lodge' }],
   });
   res.json({ lodge });
@@ -17,7 +21,9 @@ export const create = async (req, res) => {
 export const get = async (req, res) => {
   const { lodgeId } = req.params;
   req.ability.throwUnlessCan('read', 'Lodge');
-  const lodge = await Lodge.findById(lodgeId);
+  const lodge = await Lodge.findById(lodgeId)
+    .accessibleBy(req.ability)
+    .exec();
   res.json({ lodge });
 };
 
@@ -31,7 +37,9 @@ export const update = async (req, res) => {
   const { lodgeId } = req.params;
   const { body } = req;
   const updates = pick(body, ['council', 'name', 'chapters']);
-  const lodge = await Lodge.findById(lodgeId);
+  const lodge = await Lodge.findById(lodgeId)
+    .accessibleBy(req.ability)
+    .exec();
   if (!lodge) {
     throw new HttpError('Lodge not found', 404);
   }
@@ -43,7 +51,9 @@ export const update = async (req, res) => {
 
 export const remove = async (req, res) => {
   const { lodgeId } = req.params;
-  const lodge = await Lodge.findById(lodgeId);
+  const lodge = await Lodge.findById(lodgeId)
+    .accessibleBy(req.ability)
+    .exec();
   if (!lodge) {
     throw new HttpError('Lodge not found', 404);
   }

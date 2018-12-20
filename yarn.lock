@@ -97,6 +97,11 @@
   dependencies:
     sift "^7.0.1"
 
+"@casl/mongoose@^2.2.2":
+  version "2.2.2"
+  resolved "https://registry.yarnpkg.com/@casl/mongoose/-/mongoose-2.2.2.tgz#1473ec4bc787dd4b30d654bcde86ca294c982b72"
+  integrity sha512-bw5XCVk7T7LRF3Xm/arTzUAjjv0EbglmCb0RNA4pEyQ72AvGAvclK9kJIGTBdmq8AFTCxT/PWvJEsEu8DWO63A==
+
 "@ladjs/i18n@^0.3.2":
   version "0.3.2"
   resolved "https://registry.yarnpkg.com/@ladjs/i18n/-/i18n-0.3.2.tgz#b7c79253f60c7962953baf2fb11b6622d2341065"

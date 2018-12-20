@@ -9,9 +9,13 @@ import { notifyElectionRequested } from 'emails/notifyChapter';
 import Election from './model';
 
 export const create = async (req, res) => {
-  const { body, userId } = req;
-  const inputs = pick(body, ['unitId', 'requestedDates', 'status']);
-  const unit = await Unit.findById(inputs.unitId);
+  const {
+    body,
+    user: { userId },
+  } = req;
+  req.ability.throwUnlessCan('create', 'Election');
+  const inputs = pick(body, ['unit', 'requestedDates', 'status']);
+  const unit = await Unit.findById(inputs.unit);
   let election = new Election({
     ...inputs,
     season: '2019',
@@ -19,10 +23,12 @@ export const create = async (req, res) => {
     status: 'Requested',
   });
   await election.save();
-  const user = await User.findOneAndUpdate(userId, {
-    belongsTo: [
-      { organization: election._id, canManage: true, model: 'Election' },
-    ],
+  const user = await User.findByIdAndUpdate(userId, {
+    $push: {
+      belongsTo: [
+        { organization: election._id, canManage: true, model: 'Election' },
+      ],
+    },
   });
   const dates = election.requestedDates.map((date: string) =>
     format(date, 'MM/dd/yyyy')
@@ -44,8 +50,9 @@ export const create = async (req, res) => {
 
 export const get = async (req, res) => {
   const { electionId } = req.params;
-  req.ability.throwUnlessCan('read', 'Election');
-  const election = await Election.findById(electionId);
+  const election = await Election.findById(electionId)
+    .accessibleBy(req.ability)
+    .exec();
   if (!election) {
     throw new HttpError('Election not found', 404);
   }
@@ -54,7 +61,9 @@ export const get = async (req, res) => {
 
 export const list = async (req, res) => {
   req.ability.throwUnlessCan('read', 'Election');
-  const elections = await Election.find();
+  const elections = await Election.accessibleBy(req.ability)
+    .populate('unit')
+    .exec();
   res.json({ elections });
 };
 
@@ -62,7 +71,9 @@ export const update = async (req, res) => {
   const { electionId } = req.params;
   const { body } = req;
   const updates = pick(body, ['council', 'name', 'chapters']);
-  const election = await Election.findById(electionId);
+  const election = await Election.findById(electionId)
+    .accessibleBy(req.ability)
+    .exec();
   if (!election) {
     throw new HttpError('Election not found', 404);
   }
@@ -74,11 +85,12 @@ export const update = async (req, res) => {
 
 export const remove = async (req, res) => {
   const { electionId } = req.params;
-  const election = await Election.findById(electionId);
+  const election = await Election.findById(electionId)
+    .accessibleBy(req.ability)
+    .exec();
   if (!election) {
     throw new HttpError('Election not found', 404);
   }
-  req.ability.throwUnlessCan('delete', election);
   await election.remove();
   res.status(202).send();
 };

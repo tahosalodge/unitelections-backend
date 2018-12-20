@@ -15,9 +15,9 @@ export interface IElection extends Document {
 }
 
 const election = new Schema({
-  unitId: {
+  unit: {
     type: Schema.Types.ObjectId,
-    ref: 'unit',
+    ref: 'Unit',
     required: true,
     index: true,
   },

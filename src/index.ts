@@ -1,24 +1,29 @@
-require('module-alias/register');
+if (process.env.NODE_ENV === 'production') {
+  require('module-alias/register');
+}
 import * as express from 'express';
 import * as mongoose from 'mongoose';
 import * as bodyParser from 'body-parser';
 import * as morgan from 'morgan';
 import * as cors from 'cors';
 import * as Sentry from '@sentry/node';
+import { accessibleRecordsPlugin } from '@casl/mongoose';
+import config from 'utils/config';
+
+Sentry.init({ dsn: config.sentry });
+mongoose.connect(
+  config.mongoUrl,
+  { useNewUrlParser: true }
+);
+mongoose.plugin(accessibleRecordsPlugin);
 
 import * as errors from 'utils/errors';
-import config from 'utils/config';
 import lodgeRoutes from 'lodge/routes';
 import userRoutes from 'user/routes';
 import unitRoutes from 'unit/routes';
 import electionRoutes from 'election/routes';
 
-Sentry.init({ dsn: config.sentry });
 const app = express();
-mongoose.connect(
-  config.mongoUrl,
-  { useNewUrlParser: true }
-);
 app.use(Sentry.Handlers.requestHandler() as express.RequestHandler);
 app.use(morgan('dev'));
 

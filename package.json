@@ -8,6 +8,7 @@
   },
   "dependencies": {
     "@casl/ability": "^2.5.1",
+    "@casl/mongoose": "^2.2.2",
     "@sentry/node": "^4.4.2",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.18.3",

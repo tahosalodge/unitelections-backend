@@ -5,7 +5,11 @@ import Unit from './model';
 // import sendEmail from 'emails/sendMail';
 
 export const create = async (req, res) => {
-  const { body, userId } = req;
+  const {
+    body,
+    user: { userId },
+  } = req;
+  req.ability.throwUnlessCan('create', 'Unit');
   const inputs = pick(body, [
     'unitLeader',
     'activeMembers',
@@ -24,8 +28,10 @@ export const create = async (req, res) => {
   }
   const unit = new Unit(inputs);
   await unit.save();
-  const user = await User.findOneAndUpdate(userId, {
-    belongsTo: [{ organization: unit._id, canManage: true, model: 'Unit' }],
+  await User.findByIdAndUpdate(userId, {
+    $push: {
+      belongsTo: [{ organization: unit._id, canManage: true, model: 'Unit' }],
+    },
   });
   res.json({ unit });
 };
@@ -33,13 +39,15 @@ export const create = async (req, res) => {
 export const get = async (req, res) => {
   const { unitId } = req.params;
   req.ability.throwUnlessCan('read', 'Unit');
-  const unit = await Unit.findById(unitId);
+  const unit = await Unit.findById(unitId)
+    .accessibleBy(req.ability)
+    .exec();
   res.json({ unit });
 };
 
 export const list = async (req, res) => {
   req.ability.throwUnlessCan('read', 'Unit');
-  const units = await Unit.find();
+  const units = await Unit.accessibleBy(req.ability).exec();
   res.json({ units });
 };
 
@@ -47,7 +55,9 @@ export const update = async (req, res) => {
   const { unitId } = req.params;
   const { body } = req;
   const updates = pick(body, ['council', 'name', 'chapters']);
-  const unit = await Unit.findById(unitId);
+  const unit = await Unit.findById(unitId)
+    .accessibleBy(req.ability)
+    .exec();
   if (!unit) {
     throw new HttpError('Unit not found', 404);
   }
@@ -59,7 +69,9 @@ export const update = async (req, res) => {
 
 export const remove = async (req, res) => {
   const { unitId } = req.params;
-  const unit = await Unit.findById(unitId);
+  const unit = await Unit.findById(unitId)
+    .accessibleBy(req.ability)
+    .exec();
   if (!unit) {
     throw new HttpError('Unit not found', 404);
   }
