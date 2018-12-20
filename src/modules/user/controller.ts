@@ -131,6 +131,7 @@ export const resetPassword = async (req, res) => {
  */
 
 export const create = async (req, res) => {
+  req.ability.throwUnlessCan('manage', 'Users');
   const data = pick(req.body, [
     'email',
     'fname',
@@ -149,14 +150,14 @@ export const create = async (req, res) => {
 };
 
 export const get = async (req, res) => {
-  req.ability.throwUnlessCan('read', 'Users');
+  req.ability.throwUnlessCan('manage', 'Users');
   const { userId } = req.params;
   const user = await User.findById(userId);
   res.json({ user });
 };
 
 export const list = async (req, res) => {
-  req.ability.throwUnlessCan('read', 'Users');
+  req.ability.throwUnlessCan('manage', 'Users');
   const users = await User.find();
   res.json({ users });
 };
@@ -179,11 +180,9 @@ export const remove = async (req, res) => {
   const { userId } = req.params;
   const user = await User.findById(userId);
   if (!user) {
-    return res
-      .status(404)
-      .send({ message: `Could not find user with id "${userId}"` });
+    throw new HttpError(`Could not find user with id "${userId}"`, 404);
   }
   req.ability.throwUnlessCan('delete', user);
   await user.remove();
-  return res.status(202).send();
+  res.status(202).send();
 };
