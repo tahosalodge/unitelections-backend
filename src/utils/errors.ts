@@ -1,4 +1,5 @@
 import { Request, Response, NextFunction } from 'express';
+import { ForbiddenError } from '@casl/ability';
 
 /**
  * Custom error object, with a HTTP status code
@@ -58,7 +59,10 @@ export const developmentErrors = (
     status: err.status,
     stackHighlighted: err.stack || '',
   };
-  return res.status(err.status || 500).json(errorDetails);
+  if (err instanceof ForbiddenError) {
+    errorDetails.status = 403;
+  }
+  return res.status(errorDetails.status || 500).json(errorDetails);
 };
 
 /**
@@ -74,7 +78,17 @@ export const productionErrors = (
   req: Request,
   res: Response,
   next: NextFunction
-) =>
-  res.status(err.status || 500).json({
+) => {
+  const errorDetails = {
     message: err.message,
+    status: err.status,
+  };
+  if (err instanceof ForbiddenError) {
+    errorDetails.status = 403;
+    errorDetails.message =
+      'You do not have permissions to perform this action.';
+  }
+  return res.status(errorDetails.status || 500).json({
+    message: errorDetails.message,
   });
+};

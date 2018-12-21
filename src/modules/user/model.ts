@@ -53,7 +53,7 @@ const user = new Schema(
     password: { type: String, select: false },
     resetPasswordToken: String,
     resetPasswordExpires: Date,
-    isAdmin: Boolean,
+    isAdmin: { type: Boolean, default: false },
   },
   {
     toObject: {

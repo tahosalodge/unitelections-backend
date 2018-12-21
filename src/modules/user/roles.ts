@@ -12,6 +12,7 @@ export const defineAbilitiesFor = (user?: TokenUser) =>
         can('manage', 'User');
         can('manage', 'Unit');
         can('manage', 'Election');
+        can('administer', 'User');
       } else {
         const ids = user.belongsTo.map(related => related.organization);
         can('read', 'Lodge', { _id: { $in: ids } });

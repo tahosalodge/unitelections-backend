@@ -2,12 +2,22 @@ import * as bcrypt from 'bcryptjs';
 import * as jwt from 'jsonwebtoken';
 import * as generatePassword from 'xkpasswd/generate';
 import { pick } from 'lodash';
+
 import Lodge from 'lodge/model';
+import Election from 'election/model';
+import Unit from 'unit/model';
 import { defineAbilitiesFor, ANONYMOUS } from 'user/roles';
 import { HttpError } from 'utils/errors';
 import config from 'utils/config';
 import sendMail from 'emails/sendMail';
 import User, { IUser } from './model';
+
+const models = {
+  Lodge,
+  Election,
+  Unit,
+  User,
+};
 
 export interface Token {
   userId: string;
@@ -131,7 +141,7 @@ export const resetPassword = async (req, res) => {
  */
 
 export const create = async (req, res) => {
-  req.ability.throwUnlessCan('manage', 'Users');
+  req.ability.throwUnlessCan('manage', 'User');
   const data = pick(req.body, [
     'email',
     'fname',
@@ -150,23 +160,49 @@ export const create = async (req, res) => {
 };
 
 export const get = async (req, res) => {
-  req.ability.throwUnlessCan('manage', 'Users');
+  req.ability.throwUnlessCan('manage', 'User');
   const { userId } = req.params;
   const user = await User.findById(userId);
   res.json({ user });
 };
 
 export const list = async (req, res) => {
-  req.ability.throwUnlessCan('manage', 'Users');
-  const users = await User.find();
-  res.json({ users });
+  req.ability.throwUnlessCan('administer', 'User');
+  const users = await User.find().lean();
+  const lodge = await Lodge.findOne().lean();
+  const fullUsers = await Promise.all(
+    users.map(async user => {
+      const belongsTo = await Promise.all(
+        user.belongsTo.map(async ({ model, organization, canManage }) => {
+          let details;
+          if (model === 'Chapter') {
+            details = lodge.chapters.find(c => c._id === organization);
+          } else {
+            details = await models[model].findById(organization).lean();
+          }
+          return {
+            model,
+            organization,
+            canManage,
+            details,
+          };
+        })
+      );
+
+      return {
+        ...user,
+        belongsTo,
+      };
+    })
+  );
+  res.json({ users: fullUsers });
 };
 
 export const update = async (req, res) => {
   const { userId } = req.params;
   const { body } = req;
   const user = await User.findById(userId);
-  const updates = pick(body, ['fname', 'lname', 'email']);
+  const updates = pick(body, ['fname', 'lname', 'email', 'belongsTo']);
   if (!user) {
     throw new HttpError('User not found', 404);
   }
