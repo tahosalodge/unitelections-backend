@@ -10,7 +10,7 @@ const mgAuth = {
   auth: config.mailgun,
 };
 
-const basePath = path.resolve(__dirname, './base.njk');
+const basePath = path.resolve(__dirname, 'base.njk');
 
 const transport = config.isDevelopment
   ? (createTransport(config.smtp) as Transporter)

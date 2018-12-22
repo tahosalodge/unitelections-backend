@@ -13,7 +13,7 @@ import config from 'utils/config';
 Sentry.init({ dsn: config.sentry });
 mongoose.connect(
   config.mongoUrl,
-  { useNewUrlParser: true }
+  { useNewUrlParser: true, useCreateIndex: true, useFindAndModify: false }
 );
 mongoose.plugin(accessibleRecordsPlugin);
 
