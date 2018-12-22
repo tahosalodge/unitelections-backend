@@ -13,9 +13,9 @@ fi
 if [ -e now.json ]
 then
     yarn build
-    yarn copy-templates
-    yarn now --force --token $ZEIT_TOKEN
-    yarn now alias --token $ZEIT_TOKEN
+    yarn copy-templates || { echo 'copy failed' ; exit 1; }
+    yarn now --force --token $ZEIT_TOKEN || { echo 'now deploy failed' ; exit 1; }
+    yarn now alias --token $ZEIT_TOKEN || { echo 'alias failed' ; exit 1; }
 else
     echo "No environment to deploy, exiting."
 fi
