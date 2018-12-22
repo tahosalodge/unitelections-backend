@@ -38,7 +38,7 @@ const createEmail = options =>
     },
     send: true,
     views: {
-      root: path.resolve('src/emails'),
+      root: path.resolve(__dirname),
       options: {
         extension: 'nunjucks',
       },
