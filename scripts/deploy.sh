@@ -13,6 +13,7 @@ fi
 if [ -e now.json ]
 then
     yarn build
+    yarn copy-templates
     yarn now --force --token $ZEIT_TOKEN
     yarn now alias --token $ZEIT_TOKEN
 else

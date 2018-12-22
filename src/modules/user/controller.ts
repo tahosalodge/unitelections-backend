@@ -1,6 +1,7 @@
 import * as bcrypt from 'bcryptjs';
 import * as jwt from 'jsonwebtoken';
 import * as generatePassword from 'xkpasswd/generate';
+import * as Sentry from '@sentry/node';
 import { pick } from 'lodash';
 
 import Lodge from 'lodge/model';
@@ -118,6 +119,11 @@ export const tokenMiddleware = (req, res, next) => {
       belongsTo,
       isAdmin,
     };
+    Sentry.configureScope(scope => {
+      scope.setUser({
+        userId,
+      });
+    });
     req.ability = req.user ? defineAbilitiesFor(req.user) : ANONYMOUS;
     return next();
   } catch (error) {
