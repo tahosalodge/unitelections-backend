@@ -12,6 +12,7 @@ export interface IElection extends Document {
   election1Ballots: Number;
   election2Ballots: Number;
   chapter: String;
+  accessibleBy: any;
 }
 
 const election = new Schema({
@@ -56,6 +57,6 @@ const election = new Schema({
   },
 });
 
-const ElectionModel: Model<IUnit> = model<IElection>('Election', election);
+const ElectionModel: any = model<IElection>('Election', election);
 
 export default ElectionModel;

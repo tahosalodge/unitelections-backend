@@ -14,8 +14,9 @@ export const notifyElectionRequested = async (params: {
   const usersForChapter = users.filter(
     (user: IUser) =>
       user.belongsTo.filter(
-        b => b.model === 'chapter' && b.organization === electionChapter
+        b =>
+          b.model === 'Chapter' && b.organization.toString() === electionChapter
       ).length > 0
   );
-  emailToUsers(usersForChapter, 'chapter/requestElection', { ...params });
+  emailToUsers(usersForChapter, 'chapter/requestElection', params);
 };

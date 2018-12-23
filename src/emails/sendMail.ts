@@ -10,7 +10,7 @@ const mgAuth = {
   auth: config.mailgun,
 };
 
-const basePath = path.resolve(__dirname, 'base.njk');
+const basePath = path.resolve(__dirname, 'base.nunjucks');
 
 const transport = config.isDevelopment
   ? (createTransport(config.smtp) as Transporter)
@@ -70,7 +70,9 @@ export const templateSender = async (
         to,
       },
     });
+    console.log(`Sent email ${template} to ${to}`);
   } catch (error) {
+    console.error(error);
     Sentry.captureException(error);
   }
 };
@@ -90,8 +92,8 @@ export const emailToUsers = (
   if (!users || users.length === 0) {
     return;
   }
-  users.forEach(user => {
-    templateSender(user.email, template, locals, emailConfig);
+  users.forEach(async user => {
+    await templateSender(user.email, template, locals, emailConfig);
   });
 };
 

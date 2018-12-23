@@ -9,7 +9,7 @@ Thanks for requesting an OA election for {{unit.unitType}} {{unit.number}}! Here
     <li>Date {{ loop.index }}: {{ requestedDate }}</li>
   {% endfor %}
 </ul>
-We’ll notify you automatically when your chapter confirms a date. You can log into your election request <a href="{{{publicUrl}}/elections/{{election._id}}">here</a><br /><br />
+We’ll notify you automatically when your chapter confirms a date. You can log into your election request <a href="{{publicUrl}}/elections/{{election._id}}">here</a><br /><br />
 
 You have what you need for now. In case you have questions you can contact <a href="mailto:elections@tahosalodge.org">elections@tahosalodge.org</a> and we’ll respond as quickly as we can.<br /><br />
 

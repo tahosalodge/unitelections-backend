@@ -7,7 +7,6 @@
     <li>Date {{ loop.index }}: {{ requestedDate }}</li>
   {% endfor %}
 </ul>
-{# <a href="{{{publicUrl}}/elections/{{election._id}}/edit">Click here</a> to schedule this election, which will notify the unit. <br /> #}
 <em>Note, we're not quite ready for you to confirm elections. You'll receive another email for this election once you can schedule it online.</em><br/>
 <em>If you need any technical support, or something here seems wrong, please contact us at <a href="mailto:elections@tahosalodge.org">elections@tahosalodge.org</a>.</em>
 {% endblock %}

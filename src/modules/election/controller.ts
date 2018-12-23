@@ -16,6 +16,9 @@ export const create = async (req, res) => {
   req.ability.throwUnlessCan('create', 'Election');
   const inputs = pick(body, ['unit', 'requestedDates', 'status']);
   const unit = await Unit.findById(inputs.unit);
+  if (!unit) {
+    throw new HttpError('Unit not found.', 400);
+  }
   let election = new Election({
     ...inputs,
     season: '2019',
@@ -30,11 +33,14 @@ export const create = async (req, res) => {
       ],
     },
   });
+  if (!user) {
+    throw new HttpError('User not found.', 400);
+  }
   const dates = election.requestedDates.map((date: string) =>
     format(date, 'MM/dd/yyyy')
   );
   election = election.toObject();
-  sendEmail(user.email, 'unit/requestElection', {
+  await sendEmail(user.email, 'unit/requestElection', {
     election,
     user,
     dates,
@@ -42,7 +48,7 @@ export const create = async (req, res) => {
   });
   res.json({ election });
   try {
-    notifyElectionRequested({ election, unit, dates });
+    await notifyElectionRequested({ election, unit, dates });
   } catch (error) {
     Sentry.captureException(error);
   }
