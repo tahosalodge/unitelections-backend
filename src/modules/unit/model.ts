@@ -78,4 +78,4 @@ const unit = new Schema({
   },
 });
 
-export default model<IUnit>('Unit', unit);
+export default model<IUnit>('Unit', unit) as any;

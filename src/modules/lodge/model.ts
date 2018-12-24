@@ -9,6 +9,7 @@ export interface ILodge extends Document {
   council: Number;
   name: String;
   chapters: [IChapter];
+  accessibleBy: any;
 }
 
 const chapter = new Schema({
@@ -35,4 +36,6 @@ const lodge = new Schema({
   chapters: [chapter],
 });
 
-export default model<ILodge>('Lodge', lodge);
+const Lodge: any = model<ILodge>('Lodge', lodge);
+
+export default Lodge;

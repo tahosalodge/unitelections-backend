@@ -1,6 +1,6 @@
 import { Schema, model, Document } from 'mongoose';
 
-export interface Membership extends Document {
+export interface Membership {
   organization: string;
   canManage: boolean;
   model: string;
