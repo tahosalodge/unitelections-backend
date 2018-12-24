@@ -8,8 +8,9 @@ const router = Router();
 
 router.post('/login', catchErrors(controller.login));
 router.post('/register', catchErrors(controller.register));
+router.post('/reset-password', catchErrors(controller.resetPassword));
+router.post('/create-reset-token', catchErrors(controller.createResetToken));
 router.get('/verify', tokenMiddleware, catchErrors(controller.verify));
-router.post('/oops', tokenMiddleware, catchErrors(controller.resetPassword));
 router.get('/', tokenMiddleware, catchErrors(controller.list));
 router.post('/', tokenMiddleware, catchErrors(controller.create));
 router.get('/:userId', tokenMiddleware, catchErrors(controller.get));

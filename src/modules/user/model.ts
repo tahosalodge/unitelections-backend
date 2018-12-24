@@ -15,6 +15,8 @@ export interface IUser extends Document {
   password: string;
   belongsTo: Array<Membership>;
   isAdmin: boolean;
+  resetPasswordToken: string;
+  resetPasswordExpires: Date;
 }
 
 export interface TokenUser {

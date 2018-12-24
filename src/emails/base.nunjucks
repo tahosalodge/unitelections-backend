@@ -23,6 +23,8 @@
     width: 100%;
     ">
     {% block content %}{% endblock %}
+    <br />
+    <em>If you have any questions or issues, please contact us at <a href="mailto:elections@tahosalodge.org">elections@tahosalodge.org</a>.</em>
   </div>
 </table>
 </div>

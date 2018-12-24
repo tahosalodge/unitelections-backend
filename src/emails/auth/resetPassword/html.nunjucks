@@ -1,5 +1,8 @@
 {% extends basePath %}
 
 {% block content %}
-Your new password is: {{password}}
+Hey {{user.fname}},<br />
+Click here to reset your password: <br />
+<a href="{{publicUrl}}/reset-password/{{user.email}}/{{user.resetPasswordToken}}">Reset Password</a><br />
+
 {% endblock %}

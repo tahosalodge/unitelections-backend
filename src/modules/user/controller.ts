@@ -3,6 +3,8 @@ import * as jwt from 'jsonwebtoken';
 import * as generatePassword from 'xkpasswd/generate';
 import * as Sentry from '@sentry/node';
 import { pick } from 'lodash';
+import { isBefore, addDays } from 'date-fns';
+import * as randomstring from 'random-string';
 
 import Lodge from 'lodge/model';
 import Election from 'election/model';
@@ -51,6 +53,11 @@ export const sendUserInfo = (user: IUser) => {
   return userInfo;
 };
 
+export const resetData = () => ({
+  resetPasswordToken: randomstring(),
+  resetPasswordExpires: addDays(Date.now(), 3),
+});
+
 export const login = async (req, res) => {
   const { email, password } = pick(req.body, ['email', 'password']);
   if (!email || !password) {
@@ -59,6 +66,12 @@ export const login = async (req, res) => {
   const user = await User.findOne({ email }).select('+password');
   if (!user) {
     throw new HttpError('No user found.', 404);
+  }
+  if (!user.password || user.password === '') {
+    throw new HttpError(
+      'Check your email to set your password before logging in.',
+      400
+    );
   }
   const passwordIsValid = bcrypt.compareSync(password, user.password);
   if (!passwordIsValid) {
@@ -85,7 +98,7 @@ export const register = async (req, res) => {
     };
     const user = await User.create(toCreate);
     const lodge = await Lodge.findOne();
-    sendMail(email, 'auth/register', { fname });
+    await sendMail(email, 'auth/register', { fname });
     res.json({ user: sendUserInfo(user), lodge });
   } catch ({ message }) {
     throw new HttpError(message, 400);
@@ -132,14 +145,41 @@ export const tokenMiddleware = (req, res, next) => {
 };
 
 export const resetPassword = async (req, res) => {
+  const { email, token, password } = pick(req.body, [
+    'email',
+    'token',
+    'password',
+  ]);
+  const user = await User.findOne({ email });
+  if (
+    !user ||
+    !user.resetPasswordToken ||
+    user.resetPasswordToken !== token ||
+    !isBefore(Date.now(), user.resetPasswordExpires)
+  ) {
+    throw new HttpError(`Unable to reset password for ${email}`, 400);
+  }
+  const hashedPass = bcrypt.hashSync(password, 8);
+  await user.update({
+    password: hashedPass,
+    resetPasswordToken: null,
+    resetPasswordExpires: null,
+  });
+  res.send(`Password reset successfully.`);
+};
+
+export const createResetToken = async (req, res) => {
   const { email } = req.body;
-  const plainPassword = generatePassword({ separators: '-' });
-  const password = bcrypt.hashSync(plainPassword, 8);
-  await User.findOneAndUpdate({ email }, { password });
-  sendMail(email, 'auth/resetPassword', { password: plainPassword });
-  res.send(
-    `Password reset successfully, a new password has been emailed to you at ${email}`
+  const user = await User.findOneAndUpdate(
+    { email },
+    { ...resetData() },
+    { new: true }
   );
+  if (!user) {
+    throw new HttpError('Bad request.', 400);
+  }
+  await sendMail(email, 'auth/resetPassword', { user });
+  res.send(`Check ${email} to finish setting your password.`);
 };
 
 /**
@@ -147,22 +187,19 @@ export const resetPassword = async (req, res) => {
  */
 
 export const create = async (req, res) => {
-  req.ability.throwUnlessCan('manage', 'User');
+  req.ability.throwUnlessCan('administer', 'User');
   const data = pick(req.body, [
     'email',
     'fname',
     'lname',
-    'chapter',
-    'capability',
+    'belongsTo',
+    'isAdmin',
   ]);
-  const password = generatePassword({ separators: '-' });
-  const hashedPassword = bcrypt.hashSync(password, 8);
-  const user = await User.create({ ...data, password: hashedPassword });
-  sendMail(data.email, 'createdUser', {
-    ...data,
-    password,
+  const user = await User.create({ ...data, ...resetData() });
+  await sendMail(data.email, 'auth/createdUser', {
+    user,
   });
-  res.json(user);
+  res.json({ user });
 };
 
 export const get = async (req, res) => {
