@@ -6,8 +6,7 @@ export interface Membership {
   model: string;
 }
 
-export interface IUser extends Document {
-  _id: string;
+export interface IUser {
   fname: string;
   lname: string;
   phone?: string;
@@ -24,6 +23,8 @@ export interface TokenUser {
   belongsTo: Array<Membership>;
   isAdmin: boolean;
 }
+
+export interface IUserModel extends IUser, Document {}
 
 const user = new Schema(
   {
@@ -71,4 +72,4 @@ user.virtual('name').get(function() {
   return `${this.fname} ${this.lname}`;
 });
 
-export default model<IUser>('User', user);
+export default model<IUserModel>('User', user);

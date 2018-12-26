@@ -13,7 +13,7 @@ import { defineAbilitiesFor, ANONYMOUS } from 'user/roles';
 import { HttpError } from 'utils/errors';
 import config from 'utils/config';
 import sendMail from 'emails/sendMail';
-import User, { IUser } from './model';
+import User, { IUserModel } from './model';
 
 const models = {
   Lodge,
@@ -32,17 +32,17 @@ export interface Token {
  * Authentication Methods
  */
 
-export const createToken = (user: IUser) => {
-  const { _id: userId, belongsTo, isAdmin } = user;
+export const createToken = (user: IUserModel) => {
+  const { id: userId, belongsTo, isAdmin } = user;
   const tokenVars: Token = { userId, belongsTo, isAdmin };
   return jwt.sign(tokenVars, config.jwtSecret, { expiresIn: 86400 });
 };
 
-export const sendUserInfo = (user: IUser) => {
-  const { fname, lname, belongsTo, email, isAdmin, _id } = user;
+export const sendUserInfo = (user: IUserModel) => {
+  const { fname, lname, belongsTo, email, isAdmin, id } = user;
   const token = createToken(user);
   const userInfo = {
-    _id,
+    id,
     token,
     fname,
     lname,
@@ -219,7 +219,7 @@ export const list = async (req, res) => {
         user.belongsTo.map(async ({ model, organization, canManage }) => {
           let details;
           if (model === 'Chapter') {
-            details = lodge.chapters.find(c => c._id === organization);
+            details = lodge.chapters.find(c => c.id === organization);
           } else {
             details = await models[model].findById(organization).lean();
           }

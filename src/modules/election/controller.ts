@@ -29,7 +29,7 @@ export const create = async (req, res) => {
   const user = await User.findByIdAndUpdate(userId, {
     $push: {
       belongsTo: [
-        { organization: election._id, canManage: true, model: 'Election' },
+        { organization: election.id, canManage: true, model: 'Election' },
       ],
     },
   });

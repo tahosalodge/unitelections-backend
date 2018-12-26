@@ -14,7 +14,7 @@ interface IUnitLeader extends IRepresentative {
   position: String;
 }
 
-export interface IUnit extends Document {
+export interface IUnit {
   number: Number;
   chapter: IChapter;
   activeMembers: Number;
@@ -32,6 +32,8 @@ export interface IUnit extends Document {
     pendingUsers: [IUser];
   };
 }
+
+interface IUnitModel extends IUnit, Document {}
 
 const unit = new Schema({
   number: {
@@ -78,4 +80,4 @@ const unit = new Schema({
   },
 });
 
-export default model<IUnit>('Unit', unit) as any;
+export default model<IUnitModel>('Unit', unit) as any;

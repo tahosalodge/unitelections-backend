@@ -13,7 +13,7 @@ export const create = async (req, res) => {
   const lodge = new Lodge(inputs);
   await lodge.save();
   await User.findByIdAndUpdate(userId, {
-    belongsTo: [{ organization: lodge._id, canManage: true, model: 'Lodge' }],
+    belongsTo: [{ organization: lodge.id, canManage: true, model: 'Lodge' }],
   });
   res.json({ lodge });
 };

@@ -1,7 +1,7 @@
-import { Schema, model, Document, Model } from 'mongoose';
+import { Schema, model, Document } from 'mongoose';
 import { IUnit } from 'unit/model';
 
-export interface IElection extends Document {
+export interface IElection {
   unit: IUnit;
   requestedDates: Array<String>;
   season: String;
@@ -14,6 +14,8 @@ export interface IElection extends Document {
   chapter: String;
   accessibleBy: any;
 }
+
+interface IElectionModel extends IElection, Document {}
 
 const election = new Schema({
   unit: {
@@ -57,6 +59,6 @@ const election = new Schema({
   },
 });
 
-const ElectionModel: any = model<IElection>('Election', election);
+const ElectionModel: any = model<IElectionModel>('Election', election);
 
 export default ElectionModel;

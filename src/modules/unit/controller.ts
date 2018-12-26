@@ -30,7 +30,7 @@ export const create = async (req, res) => {
   await unit.save();
   await User.findByIdAndUpdate(userId, {
     $push: {
-      belongsTo: [{ organization: unit._id, canManage: true, model: 'Unit' }],
+      belongsTo: [{ organization: unit.id, canManage: true, model: 'Unit' }],
     },
   });
   res.json({ unit });
