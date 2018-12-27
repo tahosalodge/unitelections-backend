@@ -1,13 +1,10 @@
 {% extends basePath %}
 
 {% block content %}
-Hey {{fname}},<br />
-Thank you for having a unit election in 2017. We have successfully imported your information from Troop ${number} from last year, and you may now log in and request an election for 2018.<br />
-Login at {{publicUrl}} with the following credentials:<br /><br />
+Hey {{user.fname}},<br />
+Thank you for having a unit election in 2018. We have successfully imported your information from {{unit.unitType}} {{unit.number}} from last year, and you may now log in and request an election for 2019.<br />
+<a href="{{publicUrl}}/reset-password/{{user.email}}/{{user.resetPasswordToken}}">Click here to setup your account.</a><br />
 
-User: {{email}}<br />
-Password: {{password}}<br /><br />
-
-Please verify that your unit information was accurately imported from last year.<br />
-If you are no longer involved with this unit, please reply so we can connect with the right person.<br />
+Please verify that your unit information is still accurate.<br />
+If you are no longer involved with this unit, please reply to this email so we can connect with the right person.<br />
 {% endblock %}

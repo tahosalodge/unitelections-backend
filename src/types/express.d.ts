@@ -1,6 +1,6 @@
 import { Request } from 'express';
+import { TokenUser } from 'user/model';
 
 export interface Request {
-  userId: string;
-  userCap: string;
+  user: TokenUser;
 }

@@ -15,7 +15,7 @@ export const create = async (req, res) => {
   } = req;
   req.ability.throwUnlessCan('create', 'Election');
   const inputs = pick(body, ['unit', 'requestedDates', 'status']);
-  const unit = await Unit.findById(inputs.unit);
+  const unit = await Unit.findById(inputs.unit).lean();
   if (!unit) {
     throw new HttpError('Unit not found.', 400);
   }
@@ -23,29 +23,37 @@ export const create = async (req, res) => {
     ...inputs,
     season: '2019',
     chapter: unit.chapter,
-    status: 'Requested',
   });
   await election.save();
-  const user = await User.findByIdAndUpdate(userId, {
-    $push: {
-      belongsTo: [
-        { organization: election.id, canManage: true, model: 'Election' },
-      ],
-    },
-  });
-  if (!user) {
-    throw new HttpError('User not found.', 400);
-  }
   const dates = election.requestedDates.map((date: string) =>
     format(date, 'MM/dd/yyyy')
   );
-  election = election.toObject();
-  await sendEmail(user.email, 'unit/requestElection', {
-    election,
-    user,
-    dates,
-    unit,
-  });
+  if (inputs.status === 'Requested') {
+    // Election created by a unit
+    const user = await User.findByIdAndUpdate(userId, {
+      $push: {
+        belongsTo: [
+          { organization: election.id, canManage: true, model: 'Election' },
+        ],
+      },
+    });
+    if (!user) {
+      throw new HttpError('User not found.', 400);
+    }
+    await sendEmail(user.email, 'unit/requestElection', {
+      election,
+      user,
+      dates,
+      unit,
+    });
+  } else if (inputs.status === 'Scheduled') {
+    // Election created by chapter or admin
+    await sendEmail(unit.unitLeader.email, 'unit/scheduleElection', {
+      election,
+      user: unit.unitLeader,
+      unit,
+    });
+  }
   res.json({ election });
   try {
     await notifyElectionRequested({ election, unit, dates });
@@ -76,7 +84,7 @@ export const list = async (req, res) => {
 export const update = async (req, res) => {
   const { electionId } = req.params;
   const { body } = req;
-  const updates = pick(body, ['council', 'name', 'chapters']);
+  const updates = pick(body, ['status', 'date']);
   const election = await Election.findById(electionId)
     .accessibleBy(req.ability)
     .exec();
@@ -86,6 +94,14 @@ export const update = async (req, res) => {
   req.ability.throwUnlessCan('update', election);
   election.set({ ...updates });
   await election.save();
+  const unit = await Unit.findById(election.unit).lean();
+  await sendEmail(unit.unitLeader.email, 'unit/scheduleElection', {
+    election,
+    user: unit.unitLeader,
+    unit,
+    scheduledDate: format(election.date, 'MM/dd/yyyy'),
+    meetingTime: format(unit.meetingTime, 'hh:mm b'),
+  });
   res.json({ election });
 };
 
