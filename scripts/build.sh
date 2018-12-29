@@ -2,4 +2,4 @@
 
 yarn build
 yarn copyfiles src/emails/**/*.nunjucks dist/ -u 1
-yarn tree-node-cli -I 'node_modules' dist
+yarn tree -I 'node_modules' dist
