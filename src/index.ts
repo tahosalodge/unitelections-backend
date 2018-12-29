@@ -8,6 +8,7 @@ import * as morgan from 'morgan';
 import * as cors from 'cors';
 import * as Sentry from '@sentry/node';
 import { accessibleRecordsPlugin } from '@casl/mongoose';
+import * as mongodbErrorHandler from 'mongoose-mongodb-errors';
 import config from 'utils/config';
 
 Sentry.init({ dsn: config.sentry });
@@ -16,6 +17,7 @@ mongoose.connect(
   { useNewUrlParser: true, useCreateIndex: true, useFindAndModify: false }
 );
 mongoose.plugin(accessibleRecordsPlugin);
+mongoose.plugin(mongodbErrorHandler);
 
 import * as errors from 'utils/errors';
 import lodgeRoutes from 'lodge/routes';
