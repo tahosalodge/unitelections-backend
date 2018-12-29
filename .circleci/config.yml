@@ -20,4 +20,4 @@ jobs:
             yarn test
       - run:
           name: Deploy
-          command: ./scripts/deploy.sh
+          command: bash ./scripts/deploy.sh
