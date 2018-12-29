@@ -19,8 +19,8 @@ jobs:
           command: |
             yarn test
       - run:
+          name: Build
+          command: bash ./scripts/build.sh
+      - run:
           name: Deploy
           command: bash ./scripts/deploy.sh
-      - run:
-          name: File Tree
-          command: npx tree-node-cli -I 'node_modules' dist
