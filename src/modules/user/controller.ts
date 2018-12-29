@@ -195,7 +195,7 @@ export const create = async (req, res) => {
     'belongsTo',
     'isAdmin',
   ]);
-  const user = await User.create({ ...data, ...resetData() });
+  const user = await User.create({ ...data, ...resetData() }, { new: true });
   await sendMail(data.email, 'auth/createdUser', {
     user,
   });
