@@ -55,6 +55,7 @@
     "now": "^12.1.12",
     "prettier": "^1.15.3",
     "prettier-eslint": "^8.8.2",
+    "tree-node-cli": "^1.2.5",
     "ts-node": "^7.0.1",
     "ts-typie": "^1.1.1",
     "tsconfig-paths": "^3.7.0",

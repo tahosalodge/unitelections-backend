@@ -21,3 +21,6 @@ jobs:
       - run:
           name: Deploy
           command: bash ./scripts/deploy.sh
+      - run:
+          name: File Tree
+          command: yarn tree-node-cli -I 'node_modules' dist

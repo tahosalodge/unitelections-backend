@@ -14,7 +14,6 @@ if [ -e now.json ]
 then
     yarn build
     yarn copyfiles src/emails/**/*.nunjucks dist/ -u 1
-    tree -I --dirsfirst dist
     yarn now --force --token $ZEIT_TOKEN
     yarn now alias --token $ZEIT_TOKEN
     yarn now scale elections-api.tahosa.co all 1 --token $ZEIT_TOKEN
