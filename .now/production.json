@@ -1,0 +1,18 @@
+{
+  "version": 1,
+  "name": "elections-api-production",
+  "type": "npm",
+  "alias": ["elections-api.tahosa.co"],
+  "env": {
+    "NODE_ENV": "production",
+    "PORT": "4000",
+    "JWT_SECRET": "@elections-prod-jwt-secret",
+    "MONGO_URL": "@elections-prod-mongo-url",
+    "SENTRY_DSN": "@elections-sentry",
+    "MAILGUN_KEY": "@tahosa-mailgun-key",
+    "MAILGUN_DOMAIN": "tahosalodge.org",
+    "FROM_EMAIL": "elections@tahosalodge.org",
+    "PUBLIC_URL": "@elections-prod-public-url"
+  },
+  "files": ["dist", "package.json", "yarn.lock"]
+}
