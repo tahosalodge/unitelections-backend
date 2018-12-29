@@ -8,7 +8,6 @@ import * as morgan from 'morgan';
 import * as cors from 'cors';
 import * as Sentry from '@sentry/node';
 import { accessibleRecordsPlugin } from '@casl/mongoose';
-import * as mongodbErrorHandler from 'mongoose-mongodb-errors';
 import config from 'utils/config';
 
 Sentry.init({ dsn: config.sentry });
@@ -17,7 +16,6 @@ mongoose.connect(
   { useNewUrlParser: true, useCreateIndex: true, useFindAndModify: false }
 );
 mongoose.plugin(accessibleRecordsPlugin);
-mongoose.plugin(mongodbErrorHandler);
 
 import * as errors from 'utils/errors';
 import lodgeRoutes from 'lodge/routes';
@@ -41,6 +39,7 @@ app.use('/api/v1/election', electionRoutes);
 
 app.use(Sentry.Handlers.errorHandler() as express.ErrorRequestHandler);
 app.use(errors.notFound);
+app.use(errors.mongoValidationErrors);
 if (config.env === 'development') {
   app.use(errors.developmentErrors);
 }

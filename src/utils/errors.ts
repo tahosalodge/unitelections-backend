@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from 'express';
 import { ForbiddenError } from '@casl/ability';
+import { Error as MongooseError } from 'mongoose';
 
 /**
  * Custom error object, with a HTTP status code
@@ -10,6 +11,15 @@ export class HttpError extends Error {
   constructor(message: string, code: number) {
     super(message);
     this.status = code;
+  }
+}
+
+class ValidationError extends HttpError {
+  errors: {};
+
+  constructor(message: string, code: number, errors: any) {
+    super(message, code);
+    this.errors = errors;
   }
 }
 
@@ -38,6 +48,26 @@ export const catchErrors = fn => (
 export const notFound = (req: Request, res: Response, next: NextFunction) => {
   const err = new HttpError('Not Found', 404);
   return next(err);
+};
+
+export const mongoValidationErrors = (
+  err: MongooseError.ValidationError,
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  if (!(err instanceof MongooseError.ValidationError)) {
+    return next(err);
+  }
+
+  const validationError = new ValidationError(
+    'Validation Error',
+    400,
+    err.errors
+  );
+  return res
+    .status(validationError.status)
+    .send({ message: validationError.message, errors: validationError.errors });
 };
 
 /**
