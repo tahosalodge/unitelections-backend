@@ -3,5 +3,4 @@
 {% block content %}
 An election has been scheduled for {{unit.unitType}} {{unit.number}} on {{scheduledDate}}<br /><br />
 <a href="{{publicUrl}}/elections/{{electionId}}">Click here</a> to see the details of this election.<br />
-<em>If you need any technical support, or something here seems wrong, please contact Kevin McKernan.</em>
 {% endblock %}
