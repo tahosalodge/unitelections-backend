@@ -1,22 +1,22 @@
 export class Lodge {
-  id: string;
+  _id: string;
 
   constructor(id) {
-    this.id = id;
+    this._id = id;
   }
 }
 
 export class User {
   userId: string;
 
-  id: string;
+  _id: string;
 
   isAdmin: boolean;
 
   belongsTo: Array<any>;
 
   constructor(id, admin = false) {
-    this.id = id;
+    this._id = id;
     this.userId = id;
     this.isAdmin = admin;
     if (!admin) {
