@@ -1,5 +1,5 @@
 import { pick } from 'lodash';
-import { format } from 'date-fns';
+import { format, addHours } from 'date-fns';
 import * as Sentry from '@sentry/node';
 import User from 'user/model';
 import Unit from 'unit/model';
@@ -100,7 +100,7 @@ export const update = async (req, res) => {
     user: unit.unitLeader,
     unit,
     scheduledDate: format(election.date, 'MM/dd/yyyy'),
-    meetingTime: format(unit.meetingTime, 'hh:mm b'),
+    meetingTime: format(addHours(unit.meetingTime, 7), 'hh:mm b'),
   });
   res.json({ election });
 };
