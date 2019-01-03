@@ -7,5 +7,5 @@
     <li>Date {{ loop.index }}: {{ requestedDate }}</li>
   {% endfor %}
 </ul>
-<a href="{{{publicUrl}}/elections/{{election._id}}/edit">Click here</a> to schedule this election, which will notify the unit. <br />
+<a href="{{publicUrl}}/elections/{{election._id}}/edit">Click here</a> to schedule this election, which will notify the unit. <br />
 {% endblock %}

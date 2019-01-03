@@ -14,6 +14,7 @@ import { HttpError } from 'utils/errors';
 import config from 'utils/config';
 import sendMail from 'emails/sendMail';
 import User, { IUserModel } from './model';
+import slack from 'utils/slack';
 
 const models = {
   Lodge,
@@ -99,6 +100,7 @@ export const register = async (req, res) => {
     const user = await User.create(toCreate);
     const lodge = await Lodge.findOne();
     await sendMail(email, 'auth/register', { fname });
+    await slack.send(`${fname} ${lname} registered ${email}`);
     res.json({ user: sendUserInfo(user), lodge });
   } catch ({ message }) {
     throw new HttpError(message, 400);

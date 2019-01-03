@@ -7,6 +7,8 @@ import { HttpError } from 'utils/errors';
 import sendEmail from 'emails/sendMail';
 import { notifyElectionRequested } from 'emails/notifyChapter';
 import Election from './model';
+import slack from 'utils/slack';
+import config from 'utils/config';
 
 export const create = async (req, res) => {
   const {
@@ -46,12 +48,56 @@ export const create = async (req, res) => {
       dates,
       unit,
     });
+    await slack.send({
+      text: 'Election Requested',
+      attachments: [
+        {
+          fields: [
+            {
+              title: 'Unit',
+              value: `${unit.unitType} ${unit.number}`,
+            },
+            {
+              title: 'Dates',
+              value: dates.join(', '),
+            },
+            {
+              title: 'URL',
+              value: `${config.publicUrl}/elections/${election.id}`,
+            },
+          ],
+        },
+      ],
+    });
   } else if (inputs.status === 'Scheduled') {
     // Election created by chapter or admin
     await sendEmail(unit.unitLeader.email, 'unit/scheduleElection', {
       election,
       user: unit.unitLeader,
       unit,
+      scheduledDate: format(election.date, 'MM/dd/yyyy'),
+      meetingTime: format(addHours(unit.meetingTime, 7), 'hh:mm b'),
+    });
+    await slack.send({
+      text: 'Election Scheduled',
+      attachments: [
+        {
+          fields: [
+            {
+              title: 'Unit',
+              value: `${unit.unitType} ${unit.number}`,
+            },
+            {
+              title: 'Date',
+              value: format(election.date, 'MM/dd/yyyy'),
+            },
+            {
+              title: 'URL',
+              value: `${config.publicUrl}/elections/${election.id}`,
+            },
+          ],
+        },
+      ],
     });
   }
   res.json({ election });
@@ -101,6 +147,27 @@ export const update = async (req, res) => {
     unit,
     scheduledDate: format(election.date, 'MM/dd/yyyy'),
     meetingTime: format(addHours(unit.meetingTime, 7), 'hh:mm b'),
+  });
+  await slack.send({
+    text: 'Election Scheduled',
+    attachments: [
+      {
+        fields: [
+          {
+            title: 'Unit',
+            value: `${unit.unitType} ${unit.number}`,
+          },
+          {
+            title: 'Date',
+            value: format(election.date, 'MM/dd/yyyy'),
+          },
+          {
+            title: 'URL',
+            value: `${config.publicUrl}/elections/${election.id}`,
+          },
+        ],
+      },
+    ],
   });
   res.json({ election });
 };

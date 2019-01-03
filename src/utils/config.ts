@@ -14,6 +14,7 @@ interface Config {
   fromEmail: string;
   smtp: string;
   publicUrl: string;
+  slackUrl: string;
 }
 
 const config: Config = {
@@ -30,6 +31,7 @@ const config: Config = {
   fromEmail: process.env.FROM_EMAIL || '',
   smtp: process.env.SMTP_STRING || '',
   publicUrl: process.env.PUBLIC_URL || '',
+  slackUrl: process.env.SLACK_URL || '',
 };
 
 export default config;

@@ -12,7 +12,8 @@
     "MAILGUN_KEY": "@tahosa-mailgun-key",
     "MAILGUN_DOMAIN": "tahosalodge.org",
     "FROM_EMAIL": "elections@tahosalodge.org",
-    "PUBLIC_URL": "@elections-prod-public-url"
+    "PUBLIC_URL": "@elections-prod-public-url",
+    "SLACK_URL": "@elections-slack-webhook"
   },
   "files": ["dist", "package.json", "yarn.lock"]
 }
