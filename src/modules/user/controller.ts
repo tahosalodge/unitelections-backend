@@ -236,7 +236,7 @@ export const list = async (req, res) => {
 
       return {
         ...user,
-        status: user.passwordResetToken ? 'Invited' : 'Registered',
+        status: user.resetPasswordToken ? 'Invited' : 'Registered',
         belongsTo,
       };
     })
