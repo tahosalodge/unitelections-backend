@@ -45,5 +45,8 @@ if (config.env === 'development') {
 }
 
 app.use(errors.productionErrors);
-
-app.listen(app.get('port'), () => console.log('Have you seen the arrow?'));
+try {
+  app.listen(app.get('port'), () => console.log('Have you seen the arrow?'));
+} catch (error) {
+  console.log(error);
+}
