@@ -52,6 +52,7 @@
     "eslint-import-resolver-node": "^0.3.2",
     "eslint-plugin-import": "^2.14.0",
     "eslint-plugin-prettier": "^3.0.1",
+    "jest-junit": "^5.2.0",
     "ndb": "^1.0.42",
     "nodemon": "^1.18.9",
     "now": "^12.1.14",
