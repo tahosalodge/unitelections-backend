@@ -1,4 +1,14 @@
-import { regularUser, adminUser, lodge1, lodge2 } from 'utils/mocks';
+import {
+  regularUser,
+  adminUser,
+  chapterUser,
+  lodge1,
+  lodge2,
+  election1,
+  election2,
+  unit1,
+  unit2,
+} from 'utils/mocks';
 import { ANONYMOUS, defineAbilitiesFor } from 'user/roles';
 
 test('Anonymous user permissions', () => {
@@ -26,4 +36,12 @@ test('Admins can manage all lodges and update other users', () => {
   expect(ability.can('update', adminUser)).toBeTruthy();
   expect(ability.can('update', lodge1)).toBeTruthy();
   expect(ability.can('update', lodge2)).toBeTruthy();
+});
+
+test('Chapter users can manage elections and units in their chapter', () => {
+  const ability = defineAbilitiesFor(chapterUser);
+  expect(ability.can('manage', unit1)).toBeTruthy();
+  expect(ability.can('manage', election1)).toBeTruthy();
+  expect(ability.can('manage', unit2)).toBeFalsy();
+  expect(ability.can('manage', election2)).toBeFalsy();
 });
