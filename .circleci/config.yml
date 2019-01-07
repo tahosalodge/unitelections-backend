@@ -17,9 +17,11 @@ jobs:
       - run:
           name: Run Tests and Coverage
           command: |
-            yarn test
+            yarn test --ci --reporters=default --reporters=jest-junit
+          environment:
+            JEST_JUNIT_OUTPUT: 'reports/jest/js-test-results.xml'
       - store_test_results:
-          path: coverage
+          path: reports
       - run:
           name: Build
           command: bash ./scripts/build.sh

@@ -103,7 +103,11 @@
       "^unit/(.*)$": "<rootDir>/src/modules/unit/$1",
       "^user/(.*)$": "<rootDir>/src/modules/user/$1",
       "^utils/(.*)$": "<rootDir>/src/utils/$1"
-    }
+    },
+    "reporters": [
+      "default",
+      "jest-junit"
+    ]
   },
   "_moduleAliases": {
     "election": "dist/modules/election",
