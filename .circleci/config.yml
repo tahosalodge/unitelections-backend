@@ -24,7 +24,8 @@ jobs:
           command: |
             ./cc-test-reporter before-build
             yarn test --ci --reporters=default --reporters=jest-junit --coverage
-            cd coverage && ./cc-test-reporter after-build --coverage-input-type clover --exit-code $?
+            cp coverage/clover.xml .
+            ./cc-test-reporter after-build --coverage-input-type clover --exit-code $?
           environment:
             JEST_JUNIT_OUTPUT: 'reports/jest/js-test-results.xml'
             CC_TEST_REPORTER_ID: 'bf6467654ba35aae45006ee24474661fe42b2905e3e567ff1a33b4c13bbb115d'
