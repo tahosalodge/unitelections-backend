@@ -24,16 +24,16 @@ export interface IUnit {
     state: String;
     zip: String;
     notes: String;
-    meetingTime: String;
-    unitLeader: Object;
-    adultRepresentative: IRepresentative;
-    youthRepresentative: IRepresentative;
-    users: [IUser];
-    pendingUsers: [IUser];
   };
+  meetingTime: String;
+  unitLeader: IUnitLeader;
+  adultRepresentative: IRepresentative;
+  youthRepresentative: IRepresentative;
+  users: [IUser];
+  pendingUsers: [IUser];
 }
 
-interface IUnitModel extends IUnit, Document {}
+export interface IUnitModel extends IUnit, Document {}
 
 const unit = new Schema({
   number: {

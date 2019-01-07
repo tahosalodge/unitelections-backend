@@ -1,12 +1,21 @@
-import Unit from 'unit/model';
-import Lodge from 'lodge/model';
-import User from 'user/model';
+import {Request, Response} from 'express';
+import Unit, { IUnitModel } from 'unit/model';
+import Lodge, { IChapter } from 'lodge/model';
+import User, { IUserModel } from 'user/model';
 import axios from 'axios';
 import { HttpError } from 'utils/errors';
+import sendMail from 'emails/sendMail';
+import { resetData } from 'user/controller';
 
-let oldUnits = [] as any;
+interface ImportUnit {
+  _id: string;
+  chapter: string;
+  number: string;
+}
 
-const getOldUnits = async token => {
+let oldUnits = [] as Array<ImportUnit>;
+
+const getOldUnits = async (token: string) => {
   if (oldUnits.length) {
     return;
   }
@@ -23,7 +32,7 @@ const getOldUnits = async token => {
   }
 };
 
-const createUnit = async (oldUnit, chapters) => {
+const createUnit = async (oldUnit: ImportUnit, chapters: Array<IChapter>) => {
   const chapter = chapters.find(
     c =>
       c.name.toUpperCase() ===
@@ -44,25 +53,37 @@ const createUnit = async (oldUnit, chapters) => {
   return newUnit;
 };
 
-const createOrReturnUser = async ({ unitLeader }) => {
+const createOrReturnUser = async ({ unitLeader, _id }: IUnitModel): Promise<IUserModel> => {
   const user = await User.findOne({ email: unitLeader.email });
   if (user) {
+    await user.addRelationship(_id, 'Unit', true);
     return user;
   }
 
-  const newUser = new User({ ...unitLeader });
+  const newUser = new User({ ...unitLeader, ...resetData() });
+  await newUser.save();
+  await newUser.addRelationship(_id, 'Unit', true);
+  return newUser;
 };
 
-export const single = async (req, res) => {
+export const single = async (req: Request, res: Response) => {
   const { number, oldToken } = req.query;
   const unit = await Unit.findOne({ unitType: 'Troop', number });
+
   if (unit) {
     throw new HttpError('Unit already exists', 400);
   }
   await getOldUnits(oldToken);
   const { chapters } = await Lodge.findOne().lean();
-  const oldUnit = oldUnits.find(u => u.number === number);
+  const oldUnit: ImportUnit | undefined = oldUnits.find(u => u.number === number);
+
+  if (!oldUnit) {
+    throw new HttpError('Unit not found', 400);
+  }
   const newUnit = await createUnit(oldUnit, chapters);
+  const user = await createOrReturnUser(newUnit);
+  await sendMail(user.email, 'unit/import', { user, unit: newUnit });
+
   res.send({
     message: `Successfully imported Troop ${number}`,
     oldUnit,
@@ -70,7 +91,7 @@ export const single = async (req, res) => {
   });
 };
 
-export const all = async (req, res) => {
+export const all = async (req: Request, res: Response) => {
   const { oldToken } = req.query;
   await getOldUnits(oldToken);
   let successful = [] as any;
@@ -78,7 +99,7 @@ export const all = async (req, res) => {
   let exists = [] as any;
   const { chapters } = await Lodge.findOne().lean();
   await Promise.all(
-    oldUnits.map(async oldUnit => {
+    oldUnits.map(async (oldUnit: ImportUnit) => {
       try {
         const unit = await Unit.findOne({
           unitType: 'Troop',
@@ -89,6 +110,8 @@ export const all = async (req, res) => {
         }
         const newUnit = await createUnit(oldUnit, chapters);
         successful.push(newUnit);
+        const user = await createOrReturnUser(newUnit);
+        await sendMail(user.email, 'unit/import', { user, unit: newUnit });
       } catch (error) {
         if (error.message === 'Unit already exists') {
           exists.push({ oldUnit });

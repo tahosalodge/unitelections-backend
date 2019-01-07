@@ -164,7 +164,7 @@ export const resetPassword = async (req, res) => {
     !user ||
     !user.resetPasswordToken ||
     user.resetPasswordToken !== token ||
-    !isBefore(Date.now(), user.resetPasswordExpires)
+    !isBefore(Date.now(), user.resetPasswordExpires || '')
   ) {
     throw new HttpError(`Unable to reset password for ${email}`, 400);
   }

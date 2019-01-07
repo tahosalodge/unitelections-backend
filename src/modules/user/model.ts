@@ -14,8 +14,8 @@ export interface IUser {
   password: string;
   belongsTo: Array<Membership>;
   isAdmin: boolean;
-  resetPasswordToken: string;
-  resetPasswordExpires: Date;
+  resetPasswordToken: string | null;
+  resetPasswordExpires: Date | null;
 }
 
 export interface TokenUser {
@@ -24,7 +24,9 @@ export interface TokenUser {
   isAdmin: boolean;
 }
 
-export interface IUserModel extends IUser, Document {}
+export interface IUserModel extends IUser, Document {
+  addRelationship: (organization: string, model: string, canManage: boolean) => void;
+}
 
 const user = new Schema(
   {
@@ -71,5 +73,15 @@ const user = new Schema(
 user.virtual('name').get(function() {
   return `${this.fname} ${this.lname}`;
 });
+
+user.methods.addRelationship = function(organization: string, model: string, canManage = false) {
+  return this.model('User').update({
+    $push: {
+      belongsTo: [
+        { organization, canManage, model },
+      ],
+    },
+  });
+}
 
 export default model<IUserModel>('User', user);
