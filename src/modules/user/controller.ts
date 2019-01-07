@@ -146,6 +146,13 @@ export const tokenMiddleware = (req, res, next) => {
   }
 };
 
+export const adminMiddleware = (req, res, next) => {
+  if (!req.user.isAdmin) {
+    throw new HttpError('Unauthorized', 403);
+  }
+  return next();
+};
+
 export const resetPassword = async (req, res) => {
   const { email, token, password } = pick(req.body, [
     'email',
