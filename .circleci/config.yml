@@ -18,6 +18,8 @@ jobs:
           name: Run Tests and Coverage
           command: |
             yarn test
+      - store_test_results:
+          path: coverage
       - run:
           name: Build
           command: bash ./scripts/build.sh
