@@ -56,7 +56,7 @@ export const sendUserInfo = (user: IUserModel) => {
 
 export const resetData = () => ({
   resetPasswordToken: randomstring(),
-  resetPasswordExpires: addDays(Date.now(), 3),
+  resetPasswordExpires: addDays(Date.now(), 7),
 });
 
 export const login = async (req, res) => {
