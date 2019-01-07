@@ -15,11 +15,19 @@ jobs:
           paths:
             - ./node_modules
       - run:
+          name: Setup Code Climate test-reporter
+          command: |
+            curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+            chmod +x ./cc-test-reporter
+      - run:
           name: Run Tests and Coverage
           command: |
+            ./cc-test-reporter before-build
             yarn test --ci --reporters=default --reporters=jest-junit
+            ./cc-test-reporter after-build --coverage-input-type clover --exit-code $?
           environment:
             JEST_JUNIT_OUTPUT: 'reports/jest/js-test-results.xml'
+            CC_TEST_REPORTER_ID: 'bf6467654ba35aae45006ee24474661fe42b2905e3e567ff1a33b4c13bbb115d'
       - store_test_results:
           path: reports
       - run:
