@@ -23,7 +23,7 @@ jobs:
           name: Run Tests and Coverage
           command: |
             ./cc-test-reporter before-build
-            yarn test --ci --reporters=default --reporters=jest-junit
+            yarn test --ci --reporters=default --reporters=jest-junit --coverage
             cd coverage && ./cc-test-reporter after-build --coverage-input-type clover --exit-code $?
           environment:
             JEST_JUNIT_OUTPUT: 'reports/jest/js-test-results.xml'
