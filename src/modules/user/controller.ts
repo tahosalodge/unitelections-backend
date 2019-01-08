@@ -146,6 +146,13 @@ export const tokenMiddleware = (req, res, next) => {
   }
 };
 
+export const adminMiddleware = (req, res, next) => {
+  if (!req.user.isAdmin) {
+    throw new HttpError('Unauthorized', 403);
+  }
+  return next();
+};
+
 export const resetPassword = async (req, res) => {
   const { email, token, password } = pick(req.body, [
     'email',
@@ -157,7 +164,7 @@ export const resetPassword = async (req, res) => {
     !user ||
     !user.resetPasswordToken ||
     user.resetPasswordToken !== token ||
-    !isBefore(Date.now(), user.resetPasswordExpires)
+    !isBefore(Date.now(), user.resetPasswordExpires || '')
   ) {
     throw new HttpError(`Unable to reset password for ${email}`, 400);
   }
