@@ -25,7 +25,11 @@ export interface TokenUser {
 }
 
 export interface IUserModel extends IUser, Document {
-  addRelationship: (organization: string, model: string, canManage: boolean) => void;
+  addRelationship: (
+    organization: string,
+    model: string,
+    canManage: boolean
+  ) => void;
 }
 
 const user = new Schema(
@@ -74,14 +78,23 @@ user.virtual('name').get(function() {
   return `${this.fname} ${this.lname}`;
 });
 
-user.methods.addRelationship = function(organization: string, model: string, canManage = false) {
-  return this.model('User').update({
-    $push: {
-      belongsTo: [
-        { organization, canManage, model },
-      ],
-    },
-  });
-}
+const User = model<IUserModel>('User', user);
 
-export default model<IUserModel>('User', user);
+export const addRelationship = (
+  id: string,
+  organization: string,
+  model: string,
+  canManage = false
+) => {
+  return User.findByIdAndUpdate(
+    id,
+    {
+      $push: {
+        belongsTo: [{ organization, canManage, model }],
+      },
+    },
+    { new: true }
+  );
+};
+
+export default User;

@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import Unit, { IUnitModel } from 'unit/model';
 import Lodge, { IChapter } from 'lodge/model';
-import User, { IUserModel } from 'user/model';
+import User, { IUserModel, addRelationship } from 'user/model';
 import axios from 'axios';
 import { HttpError } from 'utils/errors';
 import sendMail from 'emails/sendMail';
@@ -59,13 +59,13 @@ const createOrReturnUser = async ({
 }: IUnitModel): Promise<IUserModel> => {
   const user = await User.findOne({ email: unitLeader.email });
   if (user) {
-    await user.addRelationship(_id, 'Unit', true);
+    await addRelationship(user.id, _id, 'Unit', true);
     return user;
   }
 
   const newUser = new User({ ...unitLeader, ...resetData() });
   await newUser.save();
-  await newUser.addRelationship(_id, 'Unit', true);
+  await addRelationship(newUser.id, _id, 'Unit', true);
   return newUser;
 };
 
