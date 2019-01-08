@@ -105,11 +105,15 @@
       "^lodge/(.*)$": "<rootDir>/src/modules/lodge/$1",
       "^unit/(.*)$": "<rootDir>/src/modules/unit/$1",
       "^user/(.*)$": "<rootDir>/src/modules/user/$1",
-      "^utils/(.*)$": "<rootDir>/src/utils/$1"
+      "^utils/(.*)$": "<rootDir>/src/utils/$1",
+      "^admin/(.*)$": "<rootDir>/src/admin/$1"
     },
     "reporters": [
       "default",
       "jest-junit"
+    ],
+    "collectCoverageFrom": [
+      "src/**/*.{ts}"
     ]
   },
   "_moduleAliases": {
