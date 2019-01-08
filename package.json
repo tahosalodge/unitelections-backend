@@ -121,6 +121,7 @@
     "lodge": "dist/modules/lodge",
     "unit": "dist/modules/unit",
     "user": "dist/modules/user",
+    "admin": "dist/modules/admin",
     "utils": "dist/utils",
     "emails": "dist/emails"
   }
