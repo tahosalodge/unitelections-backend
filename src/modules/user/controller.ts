@@ -136,7 +136,7 @@ export const tokenMiddleware = (req, res, next) => {
     };
     Sentry.configureScope(scope => {
       scope.setUser({
-        userId,
+        id: userId,
       });
     });
     req.ability = req.user ? defineAbilitiesFor(req.user) : ANONYMOUS;
