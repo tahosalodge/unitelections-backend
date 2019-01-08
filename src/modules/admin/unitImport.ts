@@ -1,4 +1,4 @@
-import {Request, Response} from 'express';
+import { Request, Response } from 'express';
 import Unit, { IUnitModel } from 'unit/model';
 import Lodge, { IChapter } from 'lodge/model';
 import User, { IUserModel } from 'user/model';
@@ -53,7 +53,10 @@ const createUnit = async (oldUnit: ImportUnit, chapters: Array<IChapter>) => {
   return newUnit;
 };
 
-const createOrReturnUser = async ({ unitLeader, _id }: IUnitModel): Promise<IUserModel> => {
+const createOrReturnUser = async ({
+  unitLeader,
+  _id,
+}: IUnitModel): Promise<IUserModel> => {
   const user = await User.findOne({ email: unitLeader.email });
   if (user) {
     await user.addRelationship(_id, 'Unit', true);
@@ -75,7 +78,9 @@ export const single = async (req: Request, res: Response) => {
   }
   await getOldUnits(oldToken);
   const { chapters } = await Lodge.findOne().lean();
-  const oldUnit: ImportUnit | undefined = oldUnits.find(u => u.number === number);
+  const oldUnit: ImportUnit | undefined = oldUnits.find(
+    u => u.number === number
+  );
 
   if (!oldUnit) {
     throw new HttpError('Unit not found', 400);
@@ -92,7 +97,7 @@ export const single = async (req: Request, res: Response) => {
 };
 
 export const all = async (req: Request, res: Response) => {
-  const { oldToken } = req.query;
+  const { oldToken, save = false } = req.query;
   await getOldUnits(oldToken);
   let successful = [] as any;
   let failed = [] as any;
@@ -108,10 +113,14 @@ export const all = async (req: Request, res: Response) => {
         if (unit) {
           throw new HttpError('Unit already exists', 400);
         }
-        const newUnit = await createUnit(oldUnit, chapters);
-        successful.push(newUnit);
-        const user = await createOrReturnUser(newUnit);
-        await sendMail(user.email, 'unit/import', { user, unit: newUnit });
+        if (save) {
+          const newUnit = await createUnit(oldUnit, chapters);
+          successful.push(newUnit);
+          const user = await createOrReturnUser(newUnit);
+          await sendMail(user.email, 'unit/import', { user, unit: newUnit });
+        } else {
+          successful.push(oldUnit);
+        }
       } catch (error) {
         if (error.message === 'Unit already exists') {
           exists.push({ oldUnit });
