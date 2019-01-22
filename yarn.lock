@@ -1704,6 +1704,11 @@ datauri@^1.0.4:
     mimer "^0.3.2"
     semver "^5.5.0"
 
+date-fns-tz@^1.0.1:
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/date-fns-tz/-/date-fns-tz-1.0.1.tgz#c5bed0ec03faf04f8ef4dbc295ef15d9f3ca3955"
+  integrity sha512-fbHLLGPsC2fa+jen3q4UviE4And925hmYFPABpQMCOunLvrG8pYFLsIQWhn5X8TXG7GZWS3p3XNJdA2aP4F0Yg==
+
 date-fns@^2.0.0-alpha.26:
   version "2.0.0-alpha.26"
   resolved "https://registry.yarnpkg.com/date-fns/-/date-fns-2.0.0-alpha.26.tgz#e46afd73a2b50e0359446309ee7cb631d7467227"

@@ -38,7 +38,9 @@ export class User {
 
 export class Unit {
   _id: string;
+
   chapter: string;
+
   constructor(_id: string, chapter: string) {
     this._id = _id;
     this.chapter = chapter;
@@ -46,7 +48,9 @@ export class Unit {
 }
 export class Election {
   _id: string;
+
   chapter: string;
+
   constructor(_id: string, chapter: string) {
     this._id = _id;
     this.chapter = chapter;
@@ -58,7 +62,7 @@ export const adminUser = new User('591d0e4d-8a91-4f1a-9850-96454aa32a2d', true);
 export const chapterUser = new User(
   'b147853e-df09-41a7-a598-00452dd71d09',
   false,
-  [{ organization: '667993b3-01c3-409f-81fa-eb6c86ed9406' }]
+  [{ organization: '667993b3-01c3-409f-81fa-eb6c86ed9406', canManage: true }]
 );
 export const lodge1 = new Lodge('0825ba26-6b81-4c02-b216-9d5710c3d6a6');
 export const lodge2 = new Lodge('a603c695-9e06-4e09-bb0d-00539d10417d');
