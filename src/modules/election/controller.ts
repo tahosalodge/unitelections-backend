@@ -1,14 +1,16 @@
 import { pick } from 'lodash';
-import { format, addHours } from 'date-fns';
+import { format } from 'date-fns-tz';
 import * as Sentry from '@sentry/node';
 import User from 'user/model';
 import Unit from 'unit/model';
 import { HttpError } from 'utils/errors';
 import sendEmail from 'emails/sendMail';
 import { notifyElectionRequested } from 'emails/notifyChapter';
-import Election from './model';
 import slack from 'utils/slack';
 import config from 'utils/config';
+import Election from './model';
+
+const { timeZone } = config;
 
 export const create = async (req, res) => {
   const {
@@ -21,14 +23,14 @@ export const create = async (req, res) => {
   if (!unit) {
     throw new HttpError('Unit not found.', 400);
   }
-  let election = new Election({
+  const election = new Election({
     ...inputs,
     season: '2019',
     chapter: unit.chapter,
   });
   await election.save();
   const dates = election.requestedDates.map((date: string) =>
-    format(date, 'MM/dd/yyyy')
+    format(date, 'MM/dd/yyyy', { timeZone })
   );
   if (inputs.status === 'Requested') {
     // Election created by a unit
@@ -75,8 +77,8 @@ export const create = async (req, res) => {
       election,
       user: unit.unitLeader,
       unit,
-      scheduledDate: format(election.date, 'MM/dd/yyyy'),
-      meetingTime: format(addHours(unit.meetingTime, 7), 'hh:mm b'),
+      scheduledDate: format(election.date, 'MM/dd/yyyy', { timeZone }),
+      meetingTime: format(unit.meetingTime, 'hh:mm b', { timeZone }),
     });
     await slack.send({
       text: 'Election Scheduled',
@@ -89,7 +91,7 @@ export const create = async (req, res) => {
             },
             {
               title: 'Date',
-              value: format(election.date, 'MM/dd/yyyy'),
+              value: format(election.date, 'MM/dd/yyyy', { timeZone }),
             },
             {
               title: 'URL',
@@ -145,8 +147,8 @@ export const update = async (req, res) => {
     election,
     user: unit.unitLeader,
     unit,
-    scheduledDate: format(election.date, 'MM/dd/yyyy'),
-    meetingTime: format(addHours(unit.meetingTime, 7), 'hh:mm b'),
+    scheduledDate: format(election.date, 'MM/dd/yyyy', { timeZone }),
+    meetingTime: format(unit.meetingTime, 'hh:mm b', { timeZone }),
   });
   await slack.send({
     text: 'Election Scheduled',

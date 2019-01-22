@@ -15,6 +15,7 @@ interface Config {
   smtp: string;
   publicUrl: string;
   slackUrl: string;
+  timeZone: string;
 }
 
 const config: Config = {
@@ -32,6 +33,7 @@ const config: Config = {
   smtp: process.env.SMTP_STRING || '',
   publicUrl: process.env.PUBLIC_URL || '',
   slackUrl: process.env.SLACK_URL || '',
+  timeZone: 'America/Denver',
 };
 
 export default config;
