@@ -1,4 +1,4 @@
-import { Schema, model, Document } from 'mongoose';
+import { Schema, model, Document, Model } from 'mongoose';
 import { IChapter } from 'lodge/model';
 import { IUser } from 'user/model';
 
@@ -80,4 +80,6 @@ const unit = new Schema({
   },
 });
 
-export default model<IUnitModel>('Unit', unit) as any;
+const UnitModel: Model<IUnitModel> = model<IUnitModel>('Unit', unit);
+
+export default UnitModel;

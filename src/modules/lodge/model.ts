@@ -1,4 +1,4 @@
-import { Schema, model, Document } from 'mongoose';
+import { Schema, model, Document, Model } from 'mongoose';
 
 export interface IChapter {
   _id: string;
@@ -10,7 +10,7 @@ export interface ILodge {
   council: Number;
   name: String;
   chapters: [IChapter];
-  accessibleBy: any;
+  // accessibleBy: any;
 }
 
 interface ILodgeModel extends ILodge, Document {}
@@ -39,6 +39,6 @@ const lodge = new Schema({
   chapters: [chapter],
 });
 
-const Lodge: any = model<ILodgeModel>('Lodge', lodge);
+const Lodge: Model<ILodgeModel> = model<ILodgeModel>('Lodge', lodge);
 
 export default Lodge;
