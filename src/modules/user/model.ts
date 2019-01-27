@@ -1,4 +1,4 @@
-import { Schema, model, Document } from 'mongoose';
+import { Schema, model, Document, Model } from 'mongoose';
 
 export interface Membership {
   organization: string;
@@ -78,7 +78,7 @@ user.virtual('name').get(function() {
   return `${this.fname} ${this.lname}`;
 });
 
-const User = model<IUserModel>('User', user);
+const UserModel: Model<IUserModel> = model<IUserModel>('User', user);
 
 export const addRelationship = (
   id: string,
@@ -86,7 +86,7 @@ export const addRelationship = (
   model: string,
   canManage = false
 ) => {
-  return User.findByIdAndUpdate(
+  return UserModel.findByIdAndUpdate(
     id,
     {
       $push: {
@@ -97,4 +97,4 @@ export const addRelationship = (
   );
 };
 
-export default User;
+export default UserModel;
