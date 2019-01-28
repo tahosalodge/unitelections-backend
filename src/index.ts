@@ -10,12 +10,11 @@ import * as Sentry from '@sentry/node';
 import { accessibleRecordsPlugin } from '@casl/mongoose';
 import config from 'utils/config';
 
-Sentry.init({ dsn: config.sentry });
-Sentry.configureScope(scope => {
-  scope.setUser({
-    id: 'anonymous',
-  });
+Sentry.init({
+  dsn: config.sentry,
+  release: process.env.CIRCLE_SHA1,
 });
+
 mongoose.connect(
   config.mongoUrl,
   { useNewUrlParser: true, useCreateIndex: true, useFindAndModify: false }
