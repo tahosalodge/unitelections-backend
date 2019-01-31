@@ -1,4 +1,5 @@
 import { pick } from 'lodash';
+import { parseISO } from 'date-fns';
 import { format } from 'date-fns-tz';
 import * as Sentry from '@sentry/node';
 import User from 'user/model';
@@ -30,7 +31,7 @@ export const create = async (req, res) => {
   });
   await election.save();
   const dates = election.requestedDates.map((date: string) =>
-    format(date, 'MM/dd/yyyy', { timeZone })
+    format(parseISO(date), 'MM/dd/yyyy', { timeZone })
   );
   if (inputs.status === 'Requested') {
     // Election created by a unit
@@ -77,8 +78,10 @@ export const create = async (req, res) => {
       election,
       user: unit.unitLeader,
       unit,
-      scheduledDate: format(election.date, 'MM/dd/yyyy', { timeZone }),
-      meetingTime: format(unit.meetingTime, 'hh:mm b', { timeZone }),
+      scheduledDate: format(parseISO(election.date), 'MM/dd/yyyy', {
+        timeZone,
+      }),
+      meetingTime: format(parseISO(unit.meetingTime), 'hh:mm b', { timeZone }),
     });
     await slack.send({
       text: 'Election Scheduled',
@@ -91,7 +94,9 @@ export const create = async (req, res) => {
             },
             {
               title: 'Date',
-              value: format(election.date, 'MM/dd/yyyy', { timeZone }),
+              value: format(parseISO(election.date), 'MM/dd/yyyy', {
+                timeZone,
+              }),
             },
             {
               title: 'URL',
@@ -147,8 +152,8 @@ export const update = async (req, res) => {
     election,
     user: unit.unitLeader,
     unit,
-    scheduledDate: format(election.date, 'MM/dd/yyyy', { timeZone }),
-    meetingTime: format(unit.meetingTime, 'hh:mm b', { timeZone }),
+    scheduledDate: format(parseISO(election.date), 'MM/dd/yyyy', { timeZone }),
+    meetingTime: format(parseISO(unit.meetingTime), 'hh:mm b', { timeZone }),
   });
   await slack.send({
     text: 'Election Scheduled',
@@ -161,7 +166,7 @@ export const update = async (req, res) => {
           },
           {
             title: 'Date',
-            value: format(election.date, 'MM/dd/yyyy'),
+            value: format(parseISO(election.date), 'MM/dd/yyyy'),
           },
           {
             title: 'URL',
