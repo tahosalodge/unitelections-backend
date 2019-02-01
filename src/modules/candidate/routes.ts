@@ -7,8 +7,8 @@ const router = Router();
 
 router.post('/', tokenMiddleware, catchErrors(controller.create));
 router.get('/', tokenMiddleware, catchErrors(controller.list));
-router.get('/:electionId', tokenMiddleware, catchErrors(controller.get));
-router.patch('/:electionId', tokenMiddleware, catchErrors(controller.update));
-router.delete('/:electionId', tokenMiddleware, catchErrors(controller.remove));
+router.get('/:candidateId', tokenMiddleware, catchErrors(controller.get));
+router.patch('/:candidateId', tokenMiddleware, catchErrors(controller.update));
+router.delete('/:candidateId', tokenMiddleware, catchErrors(controller.remove));
 
 export default router;
