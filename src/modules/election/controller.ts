@@ -13,6 +13,23 @@ import Election from './model';
 
 const { timeZone } = config;
 
+/**
+ * Format meeting time to a readable time. Support old string values along with time in epoch
+ * @param meetingTime
+ */
+export const formatMeetingTime = (meetingTime: string): string => {
+  let formatted = meetingTime;
+  try {
+    const toNumber = Number(meetingTime);
+    if (!Number.isNaN(toNumber)) {
+      formatted = format(new Date(toNumber), 'h:mm b', { timeZone });
+    }
+  } catch (error) {
+    formatted = meetingTime;
+  }
+  return formatted;
+};
+
 export const create = async (req, res) => {
   const {
     body,
@@ -30,6 +47,7 @@ export const create = async (req, res) => {
     chapter: unit.chapter,
   });
   await election.save();
+  res.json({ election });
   const dates = election.requestedDates.map((date: string) =>
     format(parseISO(date), 'MM/dd/yyyy', { timeZone })
   );
@@ -78,10 +96,10 @@ export const create = async (req, res) => {
       election,
       user: unit.unitLeader,
       unit,
-      scheduledDate: format(parseISO(election.date), 'MM/dd/yyyy', {
+      scheduledDate: format(parseISO(election.date.toJSON()), 'MM/dd/yyyy', {
         timeZone,
       }),
-      meetingTime: format(parseISO(unit.meetingTime), 'hh:mm b', { timeZone }),
+      meetingTime: formatMeetingTime(unit.meetingTime),
     });
     await slack.send({
       text: 'Election Scheduled',
@@ -94,7 +112,7 @@ export const create = async (req, res) => {
             },
             {
               title: 'Date',
-              value: format(parseISO(election.date), 'MM/dd/yyyy', {
+              value: format(parseISO(election.date.toJSON()), 'MM/dd/yyyy', {
                 timeZone,
               }),
             },
@@ -107,12 +125,7 @@ export const create = async (req, res) => {
       ],
     });
   }
-  res.json({ election });
-  try {
-    await notifyElectionRequested({ election, unit, dates });
-  } catch (error) {
-    Sentry.captureException(error);
-  }
+  await notifyElectionRequested({ election, unit, dates });
 };
 
 export const get = async (req, res) => {
@@ -152,8 +165,10 @@ export const update = async (req, res) => {
     election,
     user: unit.unitLeader,
     unit,
-    scheduledDate: format(parseISO(election.date), 'MM/dd/yyyy', { timeZone }),
-    meetingTime: format(parseISO(unit.meetingTime), 'hh:mm b', { timeZone }),
+    scheduledDate: format(parseISO(election.date.toJSON()), 'MM/dd/yyyy', {
+      timeZone,
+    }),
+    meetingTime: formatMeetingTime(unit.meetingTime),
   });
   await slack.send({
     text: 'Election Scheduled',
@@ -166,7 +181,7 @@ export const update = async (req, res) => {
           },
           {
             title: 'Date',
-            value: format(parseISO(election.date), 'MM/dd/yyyy'),
+            value: format(parseISO(election.date.toJSON()), 'MM/dd/yyyy'),
           },
           {
             title: 'URL',

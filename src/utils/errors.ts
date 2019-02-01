@@ -92,6 +92,9 @@ export const developmentErrors = (
   if (err instanceof ForbiddenError) {
     errorDetails.status = 403;
   }
+  if (res.headersSent) {
+    return null;
+  }
   return res.status(errorDetails.status || 500).json(errorDetails);
 };
 
@@ -117,6 +120,9 @@ export const productionErrors = (
     errorDetails.status = 403;
     errorDetails.message =
       'You do not have permissions to perform this action.';
+  }
+  if (res.headersSent) {
+    return null;
   }
   return res.status(errorDetails.status || 500).json({
     message: errorDetails.message,
