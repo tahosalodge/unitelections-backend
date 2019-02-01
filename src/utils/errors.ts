@@ -93,6 +93,7 @@ export const developmentErrors = (
     errorDetails.status = 403;
   }
   if (res.headersSent) {
+    console.log(err);
     return null;
   }
   return res.status(errorDetails.status || 500).json(errorDetails);
@@ -122,6 +123,7 @@ export const productionErrors = (
       'You do not have permissions to perform this action.';
   }
   if (res.headersSent) {
+    console.log(err);
     return null;
   }
   return res.status(errorDetails.status || 500).json({

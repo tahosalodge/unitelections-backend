@@ -160,6 +160,7 @@ export const update = async (req, res) => {
   req.ability.throwUnlessCan('update', election);
   election.set({ ...updates });
   await election.save();
+  res.json({ election });
   const unit = await Unit.findById(election.unit).lean();
   await sendEmail(unit.unitLeader.email, 'unit/scheduleElection', {
     election,
@@ -191,7 +192,6 @@ export const update = async (req, res) => {
       },
     ],
   });
-  res.json({ election });
 };
 
 export const remove = async (req, res) => {
