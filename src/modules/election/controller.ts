@@ -1,6 +1,6 @@
 import { pick } from 'lodash';
 import { parseISO } from 'date-fns';
-import { format } from 'date-fns-tz';
+import { format, utcToZonedTime } from 'date-fns-tz';
 import * as Sentry from '@sentry/node';
 import User from 'user/model';
 import Unit from 'unit/model';
@@ -22,7 +22,9 @@ export const formatMeetingTime = (meetingTime: string): string => {
   try {
     const toNumber = Number(meetingTime);
     if (!Number.isNaN(toNumber)) {
-      formatted = format(new Date(toNumber), 'h:mm b', { timeZone });
+      formatted = format(utcToZonedTime(toNumber, timeZone), 'h:mm b', {
+        timeZone,
+      });
     }
   } catch (error) {
     formatted = meetingTime;
