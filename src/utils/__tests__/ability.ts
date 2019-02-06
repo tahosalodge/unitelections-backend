@@ -9,7 +9,7 @@ import {
   unit1,
   unit2,
 } from 'utils/mocks';
-import { ANONYMOUS, defineAbilitiesFor } from 'user/roles';
+import { ANONYMOUS, defineAbilitiesFor } from 'utils/ability';
 
 test('Anonymous user permissions', () => {
   expect(ANONYMOUS.can('create', 'User')).toBeTruthy();
