@@ -25,15 +25,22 @@ export const defineAbilitiesFor = (user?: TokenUser) =>
         const manageableIds = user.belongsTo
           .filter(related => related.canManage)
           .map(related => related.organization);
-        can('read', LODGE, { _id: { $in: ids } });
+
         can('read', UNIT, { _id: { $in: ids } });
         can('read', UNIT, { chapter: { $in: ids } });
         can('manage', UNIT, { chapter: { $in: manageableIds } });
         can('create', UNIT);
+
         can('read', ELECTION, { _id: { $in: ids } });
         can('read', ELECTION, { chapter: { $in: ids } });
         can('manage', ELECTION, { chapter: { $in: manageableIds } });
         can('create', ELECTION);
+
+        can('read', CANDIDATE, { election: { $in: ids } });
+        can('read', CANDIDATE, { chapter: { $in: ids } });
+        can('manage', CANDIDATE, { election: { $in: manageableIds } });
+        can('manage', CANDIDATE, { chapter: { $in: manageableIds } });
+
         can('manage', USER, { _id: user.userId });
       }
     }

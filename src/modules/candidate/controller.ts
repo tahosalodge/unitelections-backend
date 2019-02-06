@@ -3,7 +3,21 @@ import { HttpError } from 'utils/errors';
 import Candidate from './model';
 
 export const create = async ({ body, user: { userId }, ability }, res) => {
-  const inputs = pick(body, []);
+  const inputs = pick(body, [
+    'bsaid',
+    'dob',
+    'fname',
+    'lname',
+    'parentPhone',
+    'parentEmail',
+    'youthPhone',
+    'youthEmail',
+    'address',
+    'rank',
+    'election',
+    'unit',
+    'chapter',
+  ]);
   const candidate = new Candidate({
     ...inputs,
     status: 'Eligible',
@@ -11,6 +25,7 @@ export const create = async ({ body, user: { userId }, ability }, res) => {
   await candidate.save();
   res.send({ candidate });
 };
+
 export const get = async (req, res) => {
   const { candidateId } = req.params;
   const candidate = await Candidate.findById(candidateId)
@@ -21,11 +36,13 @@ export const get = async (req, res) => {
   }
   res.json({ candidate });
 };
+
 export const list = async (req, res) => {
   req.ability.throwUnlessCan('read', 'Candidate');
   const candidates = await Candidate.accessibleBy(req.ability).exec();
   res.json({ candidates });
 };
+
 export const update = async (
   { body, user: { userId }, ability, params: { candidateId } },
   res
@@ -42,6 +59,7 @@ export const update = async (
   await candidate.save();
   res.json({ candidate });
 };
+
 export const remove = async ({ params: { candidateId }, ability }, res) => {
   const candidate = await Candidate.findById(candidateId)
     .accessibleBy(ability)

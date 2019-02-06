@@ -58,11 +58,11 @@ const candidate = new Schema({
     type: String,
     required: true,
   },
-  electionId: {
+  election: {
     type: String,
     required: true,
   },
-  unitId: {
+  unit: {
     type: String,
     required: true,
   },
@@ -103,9 +103,12 @@ const candidate = new Schema({
   },
   exported: {
     type: Date,
-  }
+  },
 });
 
-const CandidateModel: Model<ICandidateModel> = model<ICandidateModel>('Candidate', candidate);
+const CandidateModel: Model<ICandidateModel> = model<ICandidateModel>(
+  'Candidate',
+  candidate
+);
 
 export default CandidateModel;
