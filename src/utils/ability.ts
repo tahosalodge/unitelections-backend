@@ -40,6 +40,7 @@ export const defineAbilitiesFor = (user?: TokenUser) =>
         can('read', CANDIDATE, { chapter: { $in: ids } });
         can('manage', CANDIDATE, { election: { $in: manageableIds } });
         can('manage', CANDIDATE, { chapter: { $in: manageableIds } });
+        can('create', CANDIDATE);
 
         can('manage', USER, { _id: user.userId });
       }
