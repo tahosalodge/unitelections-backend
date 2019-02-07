@@ -1,7 +1,7 @@
 import { parseISO } from 'date-fns';
 import { format } from 'date-fns-tz';
 import config from 'utils/config';
-import { formatMeetingTime } from '../controller';
+import { formatMeetingTime } from '../time';
 
 const { timeZone } = config;
 

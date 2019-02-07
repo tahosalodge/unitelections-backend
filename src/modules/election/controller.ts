@@ -1,7 +1,6 @@
 import { pick } from 'lodash';
 import { parseISO } from 'date-fns';
-import { format, utcToZonedTime } from 'date-fns-tz';
-import * as Sentry from '@sentry/node';
+import { format } from 'date-fns-tz';
 import User from 'user/model';
 import Unit from 'unit/model';
 import { HttpError } from 'utils/errors';
@@ -9,28 +8,10 @@ import sendEmail from 'emails/sendMail';
 import { notifyElectionRequested } from 'emails/notifyChapter';
 import slack from 'utils/slack';
 import config from 'utils/config';
+import { formatMeetingTime } from 'utils/time';
 import Election from './model';
 
 const { timeZone } = config;
-
-/**
- * Format meeting time to a readable time. Support old string values along with time in epoch
- * @param meetingTime
- */
-export const formatMeetingTime = (meetingTime: string): string => {
-  let formatted = meetingTime;
-  try {
-    const toNumber = Number(meetingTime);
-    if (!Number.isNaN(toNumber)) {
-      formatted = format(utcToZonedTime(toNumber, timeZone), 'h:mm b', {
-        timeZone,
-      });
-    }
-  } catch (error) {
-    formatted = meetingTime;
-  }
-  return formatted;
-};
 
 export const create = async (req, res) => {
   const {

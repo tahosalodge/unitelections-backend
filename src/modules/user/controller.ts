@@ -9,7 +9,7 @@ import * as randomstring from 'random-string';
 import Lodge from 'lodge/model';
 import Election from 'election/model';
 import Unit from 'unit/model';
-import { defineAbilitiesFor, ANONYMOUS } from 'user/roles';
+import { defineAbilitiesFor, ANONYMOUS } from 'utils/ability';
 import { HttpError } from 'utils/errors';
 import config from 'utils/config';
 import sendMail from 'emails/sendMail';

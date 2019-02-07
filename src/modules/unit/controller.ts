@@ -23,7 +23,7 @@ export const create = async (req, res) => {
     unitType: inputs.unitType,
   });
   if (existingUnit) {
-    throw new HttpError('Unit already exists', 400);
+    throw new HttpError('Unit already exists. Please contact us at elections@tahosalodge.org to continue.', 400);
   }
   const unit = new Unit(inputs);
   await unit.save();

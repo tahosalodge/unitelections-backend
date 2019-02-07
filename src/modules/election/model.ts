@@ -1,4 +1,4 @@
-import { Schema, model, Document } from 'mongoose';
+import { Schema, model, Document, Model } from 'mongoose';
 import { IUnit } from 'unit/model';
 
 export interface IElection {
@@ -59,6 +59,6 @@ const election = new Schema({
   },
 });
 
-const ElectionModel: any = model<IElectionModel>('Election', election);
+const ElectionModel: Model<IElectionModel> = model<IElectionModel>('Election', election);
 
 export default ElectionModel;
