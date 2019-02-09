@@ -1,5 +1,5 @@
 import { Schema, model, Document, Model } from 'mongoose';
-import { IUnit } from 'unit/model';
+import { IUnit, UnitType } from 'unit/model';
 import { IChapter } from 'lodge/model';
 import { IElection } from 'election/model';
 
@@ -14,6 +14,14 @@ enum Rank {
   Star = 'Star',
   Life = 'Life',
   Eagle = 'Eagle',
+  Discovery = 'Discovery',
+  Pathfinder = 'Pathfinder',
+  Summit = 'Summit',
+  Ranger = 'Ranger',
+  Quest = 'Quest',
+  Ordinary = 'Ordinary',
+  Able = 'Able',
+  Quartermaster = 'Quartermaster',
 }
 
 export interface ICandidate {
@@ -25,6 +33,7 @@ export interface ICandidate {
   election: Schema.Types.ObjectId | IElection;
   unit: Schema.Types.ObjectId | IUnit;
   chapter: Schema.Types.ObjectId | IChapter;
+  unitType: UnitType;
   address: {};
   parentPhone: string;
   parentEmail: string;

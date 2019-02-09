@@ -14,8 +14,15 @@ interface IUnitLeader extends IRepresentative {
   position: String;
 }
 
+export enum UnitType {
+  Troop = 'Troop',
+  Crew = 'Crew',
+  Ship = 'Ship',
+}
+
 export interface IUnit {
   number: Number;
+  unitType: UnitType;
   chapter: IChapter;
   activeMembers: Number;
   meetingLocation: {
