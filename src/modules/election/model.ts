@@ -1,6 +1,11 @@
 import { Schema, model, Document, Model } from 'mongoose';
 import { IUnit } from 'unit/model';
 
+export interface IElectionTeam {
+  name: String;
+  age: String;
+}
+
 export interface IElection {
   unit: IUnit;
   requestedDates: Array<String>;
@@ -12,7 +17,7 @@ export interface IElection {
   election1Ballots: Number;
   election2Ballots: Number;
   chapter: String;
-  accessibleBy: any;
+  electionTeam: Array<IElectionTeam>;
 }
 
 interface IElectionModel extends IElection, Document {}
@@ -57,8 +62,17 @@ const election = new Schema({
     required: true,
     index: true,
   },
+  electionTeam: [
+    {
+      name: String,
+      age: String,
+    },
+  ],
 });
 
-const ElectionModel: Model<IElectionModel> = model<IElectionModel>('Election', election);
+const ElectionModel: Model<IElectionModel> = model<IElectionModel>(
+  'Election',
+  election
+);
 
 export default ElectionModel;
