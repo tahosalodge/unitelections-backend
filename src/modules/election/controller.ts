@@ -3,6 +3,7 @@ import { parseISO } from 'date-fns';
 import { format } from 'date-fns-tz';
 import User from 'user/model';
 import Unit from 'unit/model';
+import Candidate from 'candidate/model';
 import { HttpError } from 'utils/errors';
 import sendEmail from 'emails/sendMail';
 import { notifyElectionRequested } from 'emails/notifyChapter';
@@ -187,4 +188,96 @@ export const remove = async (req, res) => {
   }
   await election.remove();
   res.status(202).send();
+};
+
+export const report = async (req, res) => {
+  const { electionId } = req.params;
+  const election = await Election.findById(electionId)
+    .accessibleBy(req.ability)
+    .exec();
+  const { ballot, ...updates } = pick(req.body, [
+    'youthPresent',
+    'election1Ballots',
+    'election2Ballots',
+    'electionTeam',
+    'ballot',
+  ]);
+  if (!election) {
+    throw new HttpError('Election not found', 404);
+  }
+  req.ability.throwUnlessCan('update', election);
+  if (election.status === 'Reported') {
+    throw new HttpError('Election has already been reported, please contact elections@tahosalodge.org', 400);
+  }
+  const unit = await Unit.findById(election.unit);
+
+  if (!unit) {
+    throw new HttpError('Unit not found', 400);
+  }
+
+  const candidates = await Promise.all(
+    Object.keys(ballot).map(async candidateId => {
+      if (ballot[candidateId]) {
+        const candidate = await Candidate.findOneAndUpdate(
+          { _id: candidateId },
+          { status: 'Elected' },
+          { new: true }
+        );
+        if (!candidate) {
+          throw new HttpError('Candidate not found', 400);
+        }
+        return candidate.toJSON();
+      }
+      const candidate = await Candidate.findOneAndUpdate(
+        { _id: candidateId },
+        { status: 'Not Elected' },
+        { new: true }
+      );
+      if (!candidate) {
+        throw new HttpError('Candidate not found', 400);
+      }
+      return candidate.toJSON();
+    })
+  );
+
+  election.set({...updates, status: 'Reported'});
+  await election.save();
+
+  res.json({ election, candidates });
+
+  const {
+    unitLeader: { email },
+  } = unit;
+
+  const electedCount = candidates.filter(
+    candidate => candidate.status === 'Elected'
+  ).length;
+
+  await sendEmail(email, 'unit/electionResults', {
+    unit,
+    electedCount,
+    election,
+  });
+  await slack.send({
+    text: 'Election Requested',
+    attachments: [
+      {
+        fields: [
+          {
+            title: 'Unit',
+            value: `${unit.unitType} ${unit.number}`,
+          },
+          {
+            title: '# Elected',
+            value: String(electedCount),
+          },
+          {
+            title: 'URL',
+            value: `${config.publicUrl}/elections/${election.id}`,
+          },
+        ],
+      },
+    ],
+  });
+
 };

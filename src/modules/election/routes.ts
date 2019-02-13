@@ -9,6 +9,11 @@ router.post('/', tokenMiddleware, catchErrors(controller.create));
 router.get('/', tokenMiddleware, catchErrors(controller.list));
 router.get('/:electionId', tokenMiddleware, catchErrors(controller.get));
 router.patch('/:electionId', tokenMiddleware, catchErrors(controller.update));
+router.patch(
+  '/:electionId/report',
+  tokenMiddleware,
+  catchErrors(controller.report)
+);
 router.delete('/:electionId', tokenMiddleware, catchErrors(controller.remove));
 
 export default router;
