@@ -6,7 +6,7 @@ interface IRepresentative {
   fname: String;
   lname: String;
   phone: String;
-  email: String;
+  email: string;
 }
 
 interface IUnitLeader extends IRepresentative {

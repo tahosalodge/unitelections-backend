@@ -17,6 +17,8 @@ export const create = async ({ body, user: { userId }, ability }, res) => {
     'election',
     'unit',
     'chapter',
+    'gender',
+    'unitType',
   ]);
   const candidate = new Candidate({
     ...inputs,
