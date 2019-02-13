@@ -6,6 +6,7 @@ const USER = 'User';
 const UNIT = 'Unit';
 const ELECTION = 'Election';
 const CANDIDATE = 'Candidate';
+const NOMINATION = 'Nomination';
 
 export const defineAbilitiesFor = (user?: TokenUser) =>
   AbilityBuilder.define((can: AbilityBuilderParts['can']) => {
@@ -19,6 +20,7 @@ export const defineAbilitiesFor = (user?: TokenUser) =>
         can('manage', UNIT);
         can('manage', ELECTION);
         can('manage', CANDIDATE);
+        can('manage', NOMINATION);
         can('administer', USER);
       } else {
         const ids = user.belongsTo.map(related => related.organization);
@@ -41,6 +43,12 @@ export const defineAbilitiesFor = (user?: TokenUser) =>
         can('manage', CANDIDATE, { election: { $in: manageableIds } });
         can('manage', CANDIDATE, { chapter: { $in: manageableIds } });
         can('create', CANDIDATE);
+
+        can('read', NOMINATION, { election: { $in: ids } });
+        can('read', NOMINATION, { chapter: { $in: ids } });
+        can('manage', NOMINATION, { election: { $in: manageableIds } });
+        can('manage', NOMINATION, { chapter: { $in: manageableIds } });
+        can('create', NOMINATION);
 
         can('manage', USER, { _id: user.userId });
       }
