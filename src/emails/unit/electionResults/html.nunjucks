@@ -5,5 +5,5 @@ The election results have been entered for {{unit.unitType}} {{unit.number}}.<br
 
 {{electedCount}} candidates were elected.<br />
 
-<a href="{{publicUrl}}/elections/{{electionId}}">Click here</a> to see the details of this election.<br />
+<a href="{{publicUrl}}/elections/{{election._id}}">Click here</a> to see the details of this election.<br />
 {% endblock %}
