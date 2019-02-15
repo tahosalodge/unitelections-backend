@@ -28,6 +28,7 @@ import unitRoutes from 'unit/routes';
 import electionRoutes from 'election/routes';
 import adminRoutes from 'admin/routes';
 import candidateRoutes from 'candidate/routes';
+import nominationRoutes from 'nomination/routes';
 
 const app = express();
 app.use(Sentry.Handlers.requestHandler() as express.RequestHandler);
@@ -44,6 +45,7 @@ app.use('/api/v1/unit', unitRoutes);
 app.use('/api/v1/election', electionRoutes);
 app.use('/api/v1/admin', adminRoutes);
 app.use('/api/v1/candidate', candidateRoutes);
+app.use('/api/v1/nomination', nominationRoutes);
 
 app.use(Sentry.Handlers.errorHandler() as express.ErrorRequestHandler);
 app.use(errors.notFound);

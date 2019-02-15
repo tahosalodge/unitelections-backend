@@ -107,6 +107,7 @@
       "^user/(.*)$": "<rootDir>/src/modules/user/$1",
       "^admin/(.*)$": "<rootDir>/src/modules/admin/$1",
       "^candidate/(.*)$": "<rootDir>/src/modules/candidate/$1",
+      "^nomination/(.*)$": "<rootDir>/src/modules/nomination/$1",
       "^utils/(.*)$": "<rootDir>/src/utils/$1"
     },
     "reporters": [
@@ -124,6 +125,7 @@
     "user": "dist/modules/user",
     "admin": "dist/modules/admin",
     "candidate": "dist/modules/candidate",
+    "nomination": "dist/modules/nomination",
     "utils": "dist/utils",
     "emails": "dist/emails"
   }

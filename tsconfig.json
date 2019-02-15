@@ -16,6 +16,7 @@
       "user/*": ["modules/user/*"],
       "admin/*": ["modules/admin/*"],
       "candidate/*": ["modules/candidate/*"],
+      "nomination/*": ["modules/nomination/*"],
       "utils/*": ["utils/*"]
     },
     "typeRoots": ["./node_modules/@types", "./src/typings"],
