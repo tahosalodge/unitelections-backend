@@ -1,12 +1,12 @@
 import { AbilityBuilder, AbilityBuilderParts } from '@casl/ability';
 import { TokenUser } from 'user/model';
 
-const LODGE = 'Lodge';
-const USER = 'User';
-const UNIT = 'Unit';
-const ELECTION = 'Election';
-const CANDIDATE = 'Candidate';
-const NOMINATION = 'Nomination';
+export const LODGE = 'Lodge';
+export const USER = 'User';
+export const UNIT = 'Unit';
+export const ELECTION = 'Election';
+export const CANDIDATE = 'Candidate';
+export const NOMINATION = 'Nomination';
 
 export const defineAbilitiesFor = (user?: TokenUser) =>
   AbilityBuilder.define((can: AbilityBuilderParts['can']) => {

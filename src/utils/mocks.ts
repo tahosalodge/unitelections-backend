@@ -71,6 +71,20 @@ export class Candidate {
   }
 }
 
+export class Nomination {
+  _id: string;
+
+  chapter: string;
+
+  election: string;
+
+  constructor(_id: string, chapter: string, election: string) {
+    this._id = _id;
+    this.chapter = chapter;
+    this.election = election;
+  }
+}
+
 const chapter1 = '667993b3-01c3-409f-81fa-eb6c86ed9406';
 const chapter2 = '52fcdb19-a303-4315-ba98-0dd5f8376738';
 
@@ -114,6 +128,17 @@ export const candidate1 = new Candidate(
   election1._id
 );
 export const candidate2 = new Candidate(
+  '78C84031-36D1-4D69-B8EA-200169112F84',
+  chapter2,
+  election2._id
+);
+
+export const nomination1 = new Nomination(
+  '899A5C94-721D-4C3E-AA67-9653A2578E3B',
+  chapter1,
+  election1._id
+);
+export const nomination2 = new Nomination(
   '78C84031-36D1-4D69-B8EA-200169112F84',
   chapter2,
   election2._id
