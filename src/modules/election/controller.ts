@@ -259,7 +259,7 @@ export const report = async (req, res) => {
     election,
   });
   await slack.send({
-    text: 'Election Requested',
+    text: 'Election Reported',
     attachments: [
       {
         fields: [
