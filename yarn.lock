@@ -384,6 +384,13 @@
   dependencies:
     "@types/retry" "*"
 
+"@types/papaparse@^4.5.7":
+  version "4.5.7"
+  resolved "https://registry.yarnpkg.com/@types/papaparse/-/papaparse-4.5.7.tgz#fff4774cb6fbfce4e0c986145c153885b6c24b88"
+  integrity sha512-/mPhDdgOKfKltm9OAF5LSvaaiNLrvyP5sSXftH21gAJpHpTMUKp0+C9bqk1z+babnOFYjUGGalzcJSiIOejzZg==
+  dependencies:
+    "@types/node" "*"
+
 "@types/range-parser@*":
   version "1.2.3"
   resolved "https://registry.yarnpkg.com/@types/range-parser/-/range-parser-1.2.3.tgz#7ee330ba7caafb98090bece86a5ee44115904c2c"
@@ -5453,6 +5460,11 @@ package-json@^4.0.0:
     registry-auth-token "^3.0.1"
     registry-url "^3.0.3"
     semver "^5.1.0"
+
+papaparse@^4.6.3:
+  version "4.6.3"
+  resolved "https://registry.yarnpkg.com/papaparse/-/papaparse-4.6.3.tgz#742e5eaaa97fa6c7e1358d2934d8f18f44aee781"
+  integrity sha512-LRq7BrHC2kHPBYSD50aKuw/B/dGcg29omyJbKWY3KsYUZU69RKwaBHu13jGmCYBtOc4odsLCrFyk6imfyNubJQ==
 
 parent-module@^1.0.0:
   version "1.0.0"

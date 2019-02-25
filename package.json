@@ -11,6 +11,7 @@
     "@casl/mongoose": "^2.3.0",
     "@sentry/node": "^4.5.3",
     "@slack/client": "^4.8.0",
+    "@types/papaparse": "^4.5.7",
     "axios": "^0.18.0",
     "bcryptjs": "^2.4.3",
     "body-parser": "^1.18.3",
@@ -30,6 +31,7 @@
     "nodemailer": "^4.7.0",
     "nodemailer-mailgun-transport": "^1.4.0",
     "nunjucks": "^3.1.7",
+    "papaparse": "^4.6.3",
     "random-string": "^0.2.0",
     "xkpasswd": "^1.0.5"
   },
