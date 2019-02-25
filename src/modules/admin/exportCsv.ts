@@ -124,8 +124,8 @@ export const candidates = async (req, res) => {
   res.setHeader('Content-Type', 'text/csv');
   res.send(csv);
   if (newOnly) {
-    candidates.forEach(({ _id }) => {
-      Candidate.findOneAndUpdate(_id, { exported: new Date() });
+    candidates.forEach(async ({ _id }) => {
+      await Candidate.findOneAndUpdate({ _id }, { exported: new Date() });
     });
   }
 }
