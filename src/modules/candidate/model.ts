@@ -27,7 +27,7 @@ enum Rank {
 export interface ICandidate {
   fname: string;
   lname: string;
-  dob: string;
+  dob: Date;
   bsaid: number;
   rank: Rank;
   election: Schema.Types.ObjectId | IElection;
@@ -44,7 +44,7 @@ export interface ICandidate {
   exported?: Date;
 }
 
-interface ICandidateModel extends ICandidate, Document {}
+export interface ICandidateModel extends ICandidate, Document {}
 
 const candidate = new Schema({
   fname: {

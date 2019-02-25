@@ -2,6 +2,7 @@ import { Router } from 'express';
 import { catchErrors } from 'utils/errors';
 import { tokenMiddleware, adminMiddleware } from 'user/controller';
 import * as unitImport from './unitImport';
+import * as exportCsv from './exportCsv';
 
 const router = Router();
 
@@ -16,6 +17,12 @@ router.get(
   tokenMiddleware,
   adminMiddleware,
   catchErrors(unitImport.all)
+);
+router.get(
+  '/candidate-export',
+  tokenMiddleware,
+  adminMiddleware,
+  catchErrors(exportCsv.candidates)
 );
 
 export default router;
