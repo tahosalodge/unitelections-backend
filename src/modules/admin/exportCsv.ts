@@ -8,13 +8,19 @@ import Lodge from 'lodge/model';
 import { HttpError } from 'utils/errors';
 import { ICandidateModel } from 'candidate/model';
 
+interface CandidateQueryParams {
+  status: string;
+  exported?: object;
+}
 
 export const candidates = async (req, res) => {
   const { newOnly } = req.query;
-  const params = {
+  const params: CandidateQueryParams = {
     status: 'Elected',
-    exported: newOnly ? { $exists: false } : null,
   };
+  if (newOnly) {
+    params.exported = { $exists: false };
+  }
   const candidates = await Candidate.find(params);
   const units = await Unit.find();
   const elections = await Election.find();
@@ -90,6 +96,17 @@ export const candidates = async (req, res) => {
       },
     },
     {
+      label: 'Unit Type',
+      value: (candidate: ICandidateModel) => {
+        const { unit } = candidate;
+        const matchedUnit = units.find(u => u._id.toString() === unit.toString() );
+        if (!matchedUnit) {
+          throw new HttpError(`Unit not found for candidate ${candidate._id}`, 400);
+        }
+        return matchedUnit.unitType;
+      },
+    },
+    {
       label: 'Unit Number',
       value: (candidate: ICandidateModel) => {
         const { unit } = candidate;
@@ -97,7 +114,7 @@ export const candidates = async (req, res) => {
         if (!matchedUnit) {
           throw new HttpError(`Unit not found for candidate ${candidate._id}`, 400);
         }
-        return `${matchedUnit.unitType} ${matchedUnit.number}`;
+        return matchedUnit.number;
       },
     },
     {
