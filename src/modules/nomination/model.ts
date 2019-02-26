@@ -12,7 +12,7 @@ enum NominationStatus {
 export interface INomination {
   fname: string;
   lname: string;
-  dob: string;
+  dob: Date;
   bsaid: number;
   election: Schema.Types.ObjectId | IElection;
   unit: Schema.Types.ObjectId | IUnit;
@@ -27,7 +27,7 @@ export interface INomination {
   exported?: Date;
 }
 
-interface INominationModel extends INomination, Document {}
+export interface INominationModel extends INomination, Document {}
 
 const nomination = new Schema({
   fname: {
