@@ -49,6 +49,10 @@ export const candidates = async (req, res) => {
       },
     },
     {
+      label: 'Gender',
+      value: 'gender',
+    },
+    {
       label: 'BSA ID',
       value: 'bsaid',
     },
