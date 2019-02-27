@@ -24,5 +24,11 @@ router.get(
   adminMiddleware,
   catchErrors(exportCsv.candidates)
 );
+router.get(
+  '/nomination-export',
+  tokenMiddleware,
+  adminMiddleware,
+  catchErrors(exportCsv.nominations)
+);
 
 export default router;
