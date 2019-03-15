@@ -39,7 +39,7 @@ export const get = async (req, res) => {
 
 export const list = async (req, res) => {
   req.ability.throwUnlessCan('read', 'Nomination');
-  const nominations = await Nomination.accessibleBy(req.ability).exec();
+  const nominations = await Nomination.accessibleBy(req.ability).sort([['lname']]).exec();
   res.json({ nominations });
 };
 

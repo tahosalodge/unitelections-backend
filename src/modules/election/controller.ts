@@ -127,6 +127,7 @@ export const list = async (req, res) => {
   req.ability.throwUnlessCan('read', 'Election');
   const elections = await Election.accessibleBy(req.ability)
     .populate('unit')
+    .sort([['status', 'descending']])
     .exec();
   res.json({ elections });
 };

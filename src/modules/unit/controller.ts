@@ -46,7 +46,7 @@ export const get = async (req, res) => {
 
 export const list = async (req, res) => {
   req.ability.throwUnlessCan('read', 'Unit');
-  const units = await Unit.accessibleBy(req.ability).exec();
+  const units = await Unit.accessibleBy(req.ability).sort([['number']]).exec();
   res.json({ units });
 };
 

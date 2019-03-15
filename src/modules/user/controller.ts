@@ -221,7 +221,7 @@ export const get = async (req, res) => {
 
 export const list = async (req, res) => {
   req.ability.throwUnlessCan('administer', 'User');
-  const users = await User.find().lean();
+  const users = await User.find().sort([['lname']]).lean();
   const lodge = await Lodge.findOne().lean();
   const fullUsers = await Promise.all(
     users.map(async user => {
