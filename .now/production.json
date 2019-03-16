@@ -10,8 +10,8 @@
     "MONGO_URL": "@elections-prod-mongo-url",
     "SENTRY_DSN": "@elections-sentry",
     "MAILGUN_KEY": "@tahosa-mailgun-key",
-    "MAILGUN_DOMAIN": "tahosalodge.org",
-    "FROM_EMAIL": "elections@tahosalodge.org",
+    "MAILGUN_DOMAIN": "tahosa.co",
+    "FROM_EMAIL": "elections@tahosa.co",
     "PUBLIC_URL": "@elections-prod-public-url",
     "SLACK_URL": "@elections-slack-webhook"
   },
