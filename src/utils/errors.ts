@@ -14,7 +14,7 @@ export class HttpError extends Error {
   }
 }
 
-class ValidationError extends HttpError {
+export class ValidationError extends HttpError {
   errors: {};
 
   constructor(message: string, code: number, errors: any) {

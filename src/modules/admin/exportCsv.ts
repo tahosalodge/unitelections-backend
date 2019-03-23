@@ -4,7 +4,7 @@ import { format } from 'date-fns';
 import Unit from 'unit/model';
 import Election from 'election/model';
 import Lodge from 'lodge/model';
-import { HttpError } from 'utils/errors';
+import { HttpError, ValidationError } from 'utils/errors';
 import Candidate, { ICandidateModel } from 'candidate/model';
 import Nomination, { INominationModel } from 'nomination/model';
 
@@ -157,10 +157,21 @@ export const candidates = async (req, res) => {
     fields: fields.map(field => field.label),
     data: candidates.map(candidate =>
       fields.map(field => {
-        if (typeof field.value === 'string') {
-          return get(candidate, field.value, '');
+        try {
+          if (typeof field.value === 'string') {
+            return get(candidate, field.value, '');
+          }
+          return field.value(candidate);
+        } catch (error) {
+          throw new ValidationError(
+            `Error occured while parsing candidate ${candidate._id}.`,
+            400,
+            {
+              candidate: candidate._id,
+              field,
+            }
+          );
         }
-        return field.value(candidate);
       })
     ),
   });
