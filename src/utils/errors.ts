@@ -108,7 +108,7 @@ export const developmentErrors = (
  * @param res
  */
 export const productionErrors = (
-  err: HttpError,
+  err: HttpError | ValidationError,
   req: Request,
   res: Response,
   next: NextFunction
@@ -126,7 +126,14 @@ export const productionErrors = (
     console.log(err);
     return null;
   }
-  return res.status(errorDetails.status || 500).json({
+  const data: {
+    message: string;
+    errors?: any;
+  } = {
     message: errorDetails.message,
-  });
+  };
+  if (err instanceof ValidationError) {
+    data.errors = err.errors;
+  }
+  return res.status(errorDetails.status || 500).json(data);
 };
